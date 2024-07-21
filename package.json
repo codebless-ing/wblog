@@ -1,0 +1,23 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "Simplest CMS to ever exist",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codebless-ing/blog.git"
+  },
+  "author": "Chrystian & Matheus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codebless-ing/blog/issues"
+  },
+  "homepage": "https://github.com/codebless-ing/blog#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

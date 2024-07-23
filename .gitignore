@@ -1,2 +1,6 @@
-package-lock.json
 node_modules/
+dist/
+package-lock.json
+
+# code testing coverage
+coverage

@@ -1,11 +1,21 @@
+import "dotenv/config";
 import express from "express";
-const app = express()
-const port = 3000
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+import routes from '@routes/index.js';
+
+const app = express();
+const port = process.env.PORT || 6010;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/', routes);
+
+/** Error handling */
+app.use(() => {
+  throw new Error("Not found");
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`App listening on port ${port}`);
 })

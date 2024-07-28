@@ -1,0 +1,63 @@
+import { Schema, mongoose } from 'mongoose'
+import { ModelException } from '@common/exceptions/appExceptions.js';
+
+// This class and all its children are instantiated as a promise
+class BaseModel {
+    #model; // Mongoose Model class      see: https://mongoosejs.com/docs/models.html
+    #doc; // Mongoose Document class     see: https://mongoosejs.com/docs/documents.html
+
+    constructor(id) {
+        // Immediately Invoked Async Function Expression ;)
+        return (async () => {
+            // Throw an exception for models without schema
+            if (!(this.constructor.SCHEMA instanceof Schema)) {
+                throw new ModelException(`Model "${this.constructor.name}" must have a valid schema`)
+            }
+
+            // Create and store the Mongoose model for this collection
+            this.#model = mongoose.model(this.constructor.name, this.constructor.SCHEMA);
+
+            // Existing document
+            if (id) {
+                this.#doc = await this.#model.findById(id)
+
+                // Copy the properties from the Mongoose doc to the model object
+                if (this.#doc) {
+                    for(let k in this.#doc._doc) {
+                        this[k] = this.#doc._doc[k]
+                    }
+
+                    return this
+                }
+
+                console.log("Document not found. Creating a new one.")
+            }
+
+            // New document
+            this.#doc = new this.#model();
+
+            return this
+        })().catch(err => {
+            throw new ModelException(err)
+        });
+    }
+
+    async save() {
+        // Copy the model object properties back to Moongose doc
+        for(let k in this) {
+            this.#doc[k] = this[k]
+        }
+        
+        await this.#doc.save();
+    }
+
+    async delete() {
+        await this.#doc.deleteOne();
+        for (let k in this) {
+            delete this[k];
+        }
+        this.#doc = this.#model = null
+    }
+}
+
+export default BaseModel;

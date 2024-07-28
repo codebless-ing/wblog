@@ -1,9 +1,11 @@
 import express from "express";
 
 import config from "./config.js";
-import { errorHandler, xhrErrorHandler, logErrors } from "@middlewares/errorHandler.js";
-import routes from '@routes/index.js';
 import { connectToDatabase } from "@models/index.js";
+import { errorHandler, xhrErrorHandler, logErrors } from "@middlewares/errorHandler.js";
+import { consoleLogger } from "@common/utils/logger.js";
+
+import routes from '@routes/index.js';
 
 /* Model */
 await connectToDatabase(
@@ -34,5 +36,5 @@ app.use(errorHandler)
 
 // Spin up the HTTP server
 app.listen(config.app.port, async () => {
-  console.log(`App listening on port ${config.app.port}`);
+  consoleLogger.info(`App listening on port ${config.app.port}`);
 })

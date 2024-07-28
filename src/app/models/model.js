@@ -1,5 +1,7 @@
 import { Schema, mongoose } from 'mongoose'
 import { ModelException } from '@common/exceptions/appExceptions.js';
+import { newLogger } from "@common/utils/logger.js";
+const logger = newLogger("Model|BaseModel")
 
 // This class and all its children are instantiated as a promise
 class BaseModel {
@@ -30,7 +32,7 @@ class BaseModel {
                     return this
                 }
 
-                console.log("Document not found. Creating a new one.")
+                logger.info("Document not found. Creating a new one.")
             }
 
             // New document
@@ -38,6 +40,7 @@ class BaseModel {
 
             return this
         })().catch(err => {
+            logger.error(err)
             throw new ModelException(err)
         });
     }

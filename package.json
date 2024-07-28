@@ -9,9 +9,9 @@
     "start:dev": "nodemon --loader esm-module-alias/loader src/app.js",
     "lint": "eslint .",
     "lint-and-fix": "eslint . --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage --coverageDirectory=coverage"
+    "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest",
+    "test:watch": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --watch",
+    "test:coverage": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --coverage --coverageDirectory=coverage"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "esm-module-alias": "^2.2.0",
     "express": "^4.19.2",
     "mongodb": "^6.8.0",
+    "mongoose": "^8.5.1",
     "winston": "^3.13.1"
   },
   "devDependencies": {
@@ -35,9 +36,15 @@
     "eslint": "^9.7.0",
     "globals": "^15.8.0",
     "jest": "^29.7.0",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "supertest": "^7.0.0"
   },
   "aliases": {
-    "@routes": "src/routes"
+    "@routes": "src/routes",
+    "@controllers": "src/http",
+    "@services": "src/app",
+    "@models": "src/app/models",
+    "@common": "src/common",
+    "@middlewares": "src/common/middlewares"
   }
 }

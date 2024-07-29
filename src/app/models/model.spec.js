@@ -4,7 +4,7 @@ import { Schema, mongoose } from 'mongoose'
 // Mongoose mocking
 const mockDeleteOne = jest.fn(() => {})
 const mockSave = jest.fn(() => {})
-const mockDoc = {
+const docStub = {
     _id: "validId",
     key: "value"
 }
@@ -12,7 +12,7 @@ const mockDoc = {
 class mockModel {
     static findById(id) {
         if (id == "validId") {
-            return { _doc: mockDoc, deleteOne: mockDeleteOne, save: mockSave }
+            return { _doc: docStub, deleteOne: mockDeleteOne, save: mockSave }
         }
 
         return null
@@ -53,7 +53,7 @@ describe('Base model layer', () => {
                 const model = new Model("validId")
 
                 test("should get a copy of the values", () => {
-                    expect(model).resolves.toMatchObject(mockDoc)
+                    expect(model).resolves.toMatchObject(docStub)
                 })
             })
         })

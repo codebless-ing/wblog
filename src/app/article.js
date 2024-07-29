@@ -1,7 +1,7 @@
 import Article from '@models/article.model.js'
 
 export default {
-    create: async ({title, body, tags, user_id, timezone}) => {
+    create: async ({title, body, tags}) => {
         const article = await new Article();
 
         article.title = title

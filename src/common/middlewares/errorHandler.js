@@ -24,7 +24,7 @@ function xhrErrorHandler(err, req, res, next) {
   }
 }
 
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res) {
   res.status(err.statusCode ?? 500)
   res.send(err.httpMessage ?? "Internal Server Error")
 }

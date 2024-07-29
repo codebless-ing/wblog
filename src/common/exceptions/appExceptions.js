@@ -23,7 +23,6 @@ class ModelException extends Error {
 class HttpException extends Error {
     layer = "Controller"
     isOperational = true
-    statusCode = 500
     httpMessage = "" // For communicating custom messages to the client
     httpReason = "" // Reason for the statusCode
 

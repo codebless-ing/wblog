@@ -13,7 +13,7 @@ class BaseModel {
         return (async () => {
             // Throw an exception for models without schema
             if (!(this.constructor.SCHEMA instanceof Schema)) {
-                throw new ModelException(`Model "${this.constructor.name}" must have a valid schema`)
+                throw new ModelException({ message: `Model "${this.constructor.name}" must have a valid schema` })
             }
 
             // Create and store the Mongoose model for this collection
@@ -41,7 +41,7 @@ class BaseModel {
             return this
         })().catch(err => {
             logger.error(err)
-            throw new ModelException(err)
+            throw new ModelException({ message: err })
         });
     }
 

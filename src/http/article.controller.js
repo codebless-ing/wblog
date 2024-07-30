@@ -27,6 +27,10 @@ class ArticleController extends BaseController {
         res.status(200)
         return await res.send("Article created successfully!");
     }
+
+    async read(req, res) {
+        res.render('article/index', { title: 'Article', message: 'This is a test page :)' });
+    }
 }
 
 export default ArticleController;

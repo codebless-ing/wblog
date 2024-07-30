@@ -5,6 +5,7 @@ const router = express.Router();
 
 const controller = new ArticleController();
 
-router.post("/", controller.create)
+router.post("/", controller.create);
+router.get("/", controller.read);
 
 export default router;

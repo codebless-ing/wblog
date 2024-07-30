@@ -1,8 +1,9 @@
 node_modules/
 dist/
+logs/
 
 # Environment
 .env
 
 # code testing coverage
-coverage
+coverage/

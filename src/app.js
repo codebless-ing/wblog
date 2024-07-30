@@ -19,6 +19,8 @@ await connectToDatabase(
 /* HTTP */
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', './src/resources/views'); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

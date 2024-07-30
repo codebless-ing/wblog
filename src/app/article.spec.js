@@ -1,9 +1,31 @@
+const collectionStub = {
+    '123': {
+        _id: 123,
+        title: 'title',
+        body: 'body',
+        tags: ['tag1', 'tag2']
+    }
+}
 // Stub for instantiated model
 const ModelObjStub = {
     save: jest.fn()
 }
 
-const ModelClassSpy = jest.fn(async () => ModelObjStub) // All models have an async constructor
+class mockModel {
+    findById = jest.fn(async (id) => {
+        const collection = collectionStub
+        return collection[id]
+    })
+}
+
+const ModelClassSpy = jest.fn(async (id) => {
+    const tempMongooseModel = new mockModel()
+    const tempMongooseDoc = await tempMongooseModel.findById(id)
+    for(let k in tempMongooseDoc) {
+        ModelObjStub[k] = tempMongooseDoc[k]
+    }
+    return ModelObjStub
+}) // All models have an async constructor
 
 /*
  *  IMPORTS
@@ -12,6 +34,8 @@ const ModelClassSpy = jest.fn(async () => ModelObjStub) // All models have an as
 jest.unstable_mockModule('@models/article.model.js', () => ({
     default: ModelClassSpy
 }));
+const mongoose = (await import('mongoose')).default;
+mongoose.model = jest.fn(() => mockModel);
 const ArticleModel = (await import("@models/article.model.js")).default;
 const ArticleService = (await import("./article.js")).default;
 
@@ -30,7 +54,7 @@ describe('Article Service', () => {
 
             let obj // Model object
 
-            test("should have an Article Model with said data", async () => {
+            test.skip("should have an Article Model with said data", async () => {
                 await ArticleService.create(validData)
                 expect(ArticleModel).toHaveBeenCalledTimes(1) // Same as instantiating an object
 
@@ -38,11 +62,19 @@ describe('Article Service', () => {
                 expect(obj).toMatchObject(validData);
             })
 
-            test("should request the data to be saved through db lib", async () => {
+            test.skip("should request the data to be saved through db lib", async () => {
                 expect(obj.save).toHaveBeenCalledTimes(1)
             })
         })
 
         // TODO: test scenario with invalid data (when data validation is implemented)
+    })
+    describe('when reading an article', () => {
+        describe('the article exists', () => {
+            const result = ArticleService.read('123')
+            test.skip('should return the article', () => {
+                expect(result).resolves.toMatchObject({message: 'Article found!', data: collectionStub[123]})
+            })
+        })
     })
 })

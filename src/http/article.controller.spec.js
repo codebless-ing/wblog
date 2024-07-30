@@ -1,3 +1,5 @@
+import { HttpException } from "@common/exceptions/appExceptions.js";
+
 // Stub for instantiated model
 class ModelObjStub {
     save() {}
@@ -5,7 +7,8 @@ class ModelObjStub {
 
 const res = {
     send: jest.fn(() => {}),
-    status: jest.fn(() => {})
+    status: jest.fn(() => {}),
+    render: jest.fn(() => {})
 }
 
 /*
@@ -35,7 +38,7 @@ describe('Article controller', () => {
                 
             })
 
-            test("should responde with 200", async () => {
+            test("should respond with 200", async () => {
                 await controller.create(req, res)
                 
                 expect(res.status).toBeCalledWith(200)
@@ -58,6 +61,34 @@ describe('Article controller', () => {
             })
 
             // TODO Create more tests when validation, view engine and contracts are implemented
+        })
+    })
+    describe('when reading an article', () => {
+        describe('with valid data', () => {
+            const req = {
+                params: {
+                    id: "66a941da61910f79bb7e22c7"
+                }
+            }
+
+            test.skip('should respond with 200', async () => {
+                await controller.read(req, res)
+                expect(res.status).toBeCalledWith(200)
+            })
+        })
+
+        describe('with invalid data', () => {
+            res.render.mockClear()
+            const req = {
+                params: {
+                    id: false
+                }
+            }
+            const result = controller.read(req, res)
+
+            test("should throw a 404 HTTPException", () => {
+                expect(result).rejects.toThrow(HttpException)
+            })
         })
     })
 })

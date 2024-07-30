@@ -29,7 +29,18 @@ class ArticleController extends BaseController {
     }
 
     async read(req, res) {
-        res.render('article/index', { title: 'Article', message: 'This is a test page :)' });
+        if (typeof req.params.id !== "string") {
+            throw new HttpException(400, 'Invalid data')
+        }
+
+        const result = await service.read(req.params.id)
+        const article = result.data
+        if (!article) {
+            throw new HttpException(404, result.message)
+        }
+
+        res.status(200)
+        res.render('article/index', { title: article.title, body: article.body, tags: article.tags });
     }
 }
 

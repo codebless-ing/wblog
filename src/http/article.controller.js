@@ -25,7 +25,7 @@ class ArticleController extends BaseController {
         })
 
         res.status(200)
-        return await res.send("Article created successfully!");
+        return res.send("Article created successfully!");
     }
 
     async read(req, res) {
@@ -34,13 +34,15 @@ class ArticleController extends BaseController {
         }
 
         const result = await service.read(req.params.id)
+
         const article = result.data
+
         if (!article) {
             throw new HttpException(404, result.message)
         }
 
         res.status(200)
-        res.render('article/index', { title: article.title, body: article.body, tags: article.tags });
+        return res.render('article/index', { title: article.title, body: article.body, tags: article.tags });
     }
 }
 

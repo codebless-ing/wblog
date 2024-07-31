@@ -6,6 +6,6 @@ const router = express.Router();
 const controller = new ArticleController();
 
 router.post("/", controller.create);
-router.get("/", controller.read);
+router.get("/:id", controller.read);
 
 export default router;

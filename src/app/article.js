@@ -10,5 +10,21 @@ export default {
 
         // TODO: user_id and timezone must be implemented after authentication
         article.save()
+    },
+
+    read: async (id) => {
+        const article = await new Article(id);
+
+        if (!article._id) {
+            return {
+                data: false,
+                message: 'Article not found!'
+            }
+        }
+
+        return {
+            data: article,
+            message: 'Article found!'
+        }
     }
 }

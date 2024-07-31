@@ -21,7 +21,9 @@ class BaseModel {
 
             // Existing document
             if (id) {
-                this.#doc = await this.#model.findById(id)
+                if (mongoose.isValidObjectId(id)) { // Don't try to find if it's not even a validObjectId
+                    this.#doc = await this.#model.findById(id)
+                }
 
                 // Copy the properties from the Mongoose doc to the model object
                 if (this.#doc) {

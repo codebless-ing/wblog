@@ -5,13 +5,17 @@ import { Schema, mongoose } from 'mongoose'
 const mockDeleteOne = jest.fn(() => {})
 const mockSave = jest.fn(() => {})
 const docStub = {
-    _id: "validId",
+    _id: "62261a65d66c6be0a63c051f",
     key: "value"
 }
 
 class mockModel {
     static findById(id) {
-        if (id == "validId") {
+        if (!mongoose.isValidObjectId(id)) {
+            throw "Invalid object id"
+        }
+
+        if (id == "62261a65d66c6be0a63c051f") {
             return { _doc: docStub, deleteOne: mockDeleteOne, save: mockSave }
         }
 
@@ -40,17 +44,21 @@ describe('Base model layer', () => {
                 expect(model).resolves.not.toThrow()
             })
 
-            describe('WITHOUT id or with an INVALID id', () => {
-                const invalidIDModel = new Model("invalidId")
+            describe('WITHOUT id or with a non existing id', () => {
+                const noIDModel = new Model();
+                const validNoExistingIDModel = new Model("507f191e810c19729de860ea");
+                const invalidIDModel = new Model("invalidId");
 
                 test("should return a new model", () => {
-                    expect(model).resolves.toBeInstanceOf(Model)
+                    expect(model).resolves.toBeInstanceOf(Model);
+                    expect(noIDModel).resolves.toEqual({});
+                    expect(validNoExistingIDModel).resolves.toEqual({});
                     expect(invalidIDModel).resolves.toEqual({});
                 })
             })
 
             describe('with a valid id', () => {
-                const model = new Model("validId")
+                const model = new Model("62261a65d66c6be0a63c051f")
 
                 test("should get a copy of the values", () => {
                     expect(model).resolves.toMatchObject(docStub)
@@ -62,7 +70,7 @@ describe('Base model layer', () => {
     // DELETE
     describe('when calling delete()', () => {
         mockDeleteOne.mockClear()
-        let model = new Model("validId")
+        let model = new Model("62261a65d66c6be0a63c051f")
 
         test("should clear itself", async () => {
             model = await model
@@ -78,7 +86,7 @@ describe('Base model layer', () => {
     // SAVE
     describe('when calling save()', () => {
         mockSave.mockClear()
-        let model = new Model("validId")
+        let model = new Model("62261a65d66c6be0a63c051f")
 
         test("should save the data in db", async () => {
             model = await model

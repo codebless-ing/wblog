@@ -1,11 +1,13 @@
 import Model from './model.js';
 import { Schema, mongoose } from 'mongoose'
 
+const VALID_ID = new mongoose.Types.ObjectId();
+
 // Mongoose mocking
 const mockDeleteOne = jest.fn(() => {})
 const mockSave = jest.fn(() => {})
 const docStub = {
-    _id: "62261a65d66c6be0a63c051f",
+    _id: VALID_ID,
     key: "value"
 }
 
@@ -15,7 +17,7 @@ class mockModel {
             throw "Invalid object id"
         }
 
-        if (id == "62261a65d66c6be0a63c051f") {
+        if (id == VALID_ID) {
             return { _doc: docStub, deleteOne: mockDeleteOne, save: mockSave }
         }
 
@@ -46,7 +48,7 @@ describe('Base model layer', () => {
 
             describe('WITHOUT id or with a non existing id', () => {
                 const noIDModel = new Model();
-                const validNoExistingIDModel = new Model("507f191e810c19729de860ea");
+                const validNoExistingIDModel = new Model(new mongoose.Types.ObjectId());
                 const invalidIDModel = new Model("invalidId");
 
                 test("should return a new model", () => {
@@ -58,7 +60,7 @@ describe('Base model layer', () => {
             })
 
             describe('with a valid id', () => {
-                const model = new Model("62261a65d66c6be0a63c051f")
+                const model = new Model(VALID_ID)
 
                 test("should get a copy of the values", () => {
                     expect(model).resolves.toMatchObject(docStub)
@@ -70,7 +72,7 @@ describe('Base model layer', () => {
     // DELETE
     describe('when calling delete()', () => {
         mockDeleteOne.mockClear()
-        let model = new Model("62261a65d66c6be0a63c051f")
+        let model = new Model(VALID_ID)
 
         test("should clear itself", async () => {
             model = await model
@@ -86,7 +88,7 @@ describe('Base model layer', () => {
     // SAVE
     describe('when calling save()', () => {
         mockSave.mockClear()
-        let model = new Model("62261a65d66c6be0a63c051f")
+        let model = new Model(VALID_ID)
 
         test("should save the data in db", async () => {
             model = await model

@@ -21,7 +21,7 @@ class BaseModel {
 
             // Existing document
             if (id) {
-                if (mongoose.isValidObjectId(id)) {
+                if (mongoose.isValidObjectId(id)) { // Don't try to find if it's not even a validObjectId
                     this.#doc = await this.#model.findById(id)
                 }
 

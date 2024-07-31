@@ -44,6 +44,35 @@ class ArticleController extends BaseController {
         res.status(200)
         return res.render('article/index', { title: article.title, body: article.body, tags: article.tags });
     }
+
+    async update(req, res) {
+        const data = req.body
+
+        // Temporary validation, you're really taking your time with it huh
+        if (
+            typeof req.params.id !== "string" || !req.params.id || !data || typeof data.title !== "string" || data.title.length < 3 || data.title.length > 250 ||
+            typeof data.body !== "string" || data.body.length < 3 || data.body.length > 5000 ||
+            typeof data.tags !== "string" || data.tags.length < 2 || data.tags.length > 5000
+        ) {
+            throw new HttpException(400, "Invalid data")
+        }
+
+        const article = {
+            id: req.params.id,
+            title: data.title,
+            body: data.body,
+            tags: data.tags.split(";")
+        }
+
+        const result = await service.update(article)
+
+        if (!result.data) {
+            throw new HttpException(404, result.message)
+        }
+
+        res.status(200)
+        return res.render('article/index', { title: article.title, body: article.body, tags: article.tags });
+    }
 }
 
 export default ArticleController;

@@ -12,6 +12,10 @@ const res = {
 };
 
 describe("Article controller", () => {
+    beforeEach(() => {
+        res.status.mockClear()
+        ModelMock.clearModelObject()
+    });
     describe("when creating a new article", () => {
         describe("with valid data", () => {
             const req = {
@@ -22,12 +26,10 @@ describe("Article controller", () => {
                 },
             };
 
-            const result = controller.create(req, res);
-
             test.skip("should return a view", () => {});
 
-            test("should respond with 200", () => {
-                expect(result).resolves.not.toThrow();
+            test("should respond with 200", async () => {
+                await controller.create(req, res)
                 expect(res.status).toBeCalledWith(200);
             });
 
@@ -58,10 +60,8 @@ describe("Article controller", () => {
                 },
             };
 
-            const result = controller.read(req, res)
-
             test("should respond with 200", async () => {
-                await result
+                await controller.read(req, res)
                 //expect(result).resolves.not.toThrow();
                 expect(res.status).toBeCalledWith(200);
             });
@@ -81,4 +81,32 @@ describe("Article controller", () => {
             });
         });
     });
+
+    describe("when updating an article", () => {
+        describe("with valid data", () => {
+            const req = {
+                params: {
+                    id: "66a941da61910f79bb7e22c7"
+                },
+                body: {
+                    title: "Big titley",
+                    body: "Bodey",
+                    tags: "uiop; jklç",
+                }
+            }
+
+            test.skip("should update the data", async () => {
+                await controller.update(req, res);
+                expect(ModelMock.collection[req.params.id]).toEqual(expect.anything())
+                expect(ModelMock.collection).toMatchObject(req.body)
+            })
+            
+            test("should respond with 200", async () => {
+                await controller.update(req, res);
+                
+                expect(res.status).toBeCalledWith(200);
+            })
+        })
+        // TODO Create more validation when the issues are fixed
+    })
 });

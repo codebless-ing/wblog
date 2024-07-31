@@ -1,23 +1,21 @@
+// Facade
 const ModelMock = {};
 
 /*
  *  STUBS
  */
-ModelMock.collection = {
-    123: {
-        _id: 123,
-        title: "title",
-        body: "body",
-        tags: ["tag1", "tag2"],
-    },
-};
+ModelMock.collection = {};
 
 /*
  * MONGOOSE_MODEL CLASS
  */
 ModelMock.GooseModel = class {
     findById = jest.fn(async (id) => {
-        return ModelMock.collection[id];
+        if (id) {
+            return ModelMock.collection[id];
+        }
+
+        return {}
     });
 };
 
@@ -48,6 +46,19 @@ ModelMock.clearModelObject = () => {
     ModelMock.object = {
         save: jest.fn(),
     };
+};
+
+ModelMock.addDocToCollection = (id, doc) => {
+    if (typeof id == "undefined") {
+        throw "An ID must be given"
+    }
+
+    if (typeof doc !== "object") {
+        throw "Doc must be an object"
+    }
+
+    ModelMock.collection[id] = doc
+    ModelMock.collection[id]._id = id
 };
 
 ModelMock.clearModelObject();

@@ -40,6 +40,11 @@ describe("Article Service", () => {
     // READ
     describe("when reading an article", () => {
         describe("the article exists", () => {
+            ModelMock.addDocToCollection(123, {
+                title: "title",
+                body: "body",
+                tags: ["tag1", "tag2"],
+            })
             const result = ArticleService.read("123");
 
             test("should return the article", () => {

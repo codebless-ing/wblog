@@ -14,6 +14,7 @@ export default {
 
     read: async (id) => {
         const article = await new Article(id);
+
         if (!article._id) {
             return {
                 data: false,

@@ -57,16 +57,17 @@ class ArticleController extends BaseController {
             throw new HttpException(400, "Invalid data")
         }
 
-        const article = {
+        const newArticle = {
             id: req.params.id,
             title: data.title,
             body: data.body,
             tags: data.tags.split(";")
         }
 
-        const result = await service.update(article)
+        const result = await service.update(newArticle)
+        const article = result.data
 
-        if (!result.data) {
+        if (!article) {
             throw new HttpException(404, result.message)
         }
 

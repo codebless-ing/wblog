@@ -1,3 +1,5 @@
+import { Types } from 'mongoose'
+
 // Facade
 const ModelMock = {};
 
@@ -44,8 +46,13 @@ ModelMock.Class = jest.fn(async (id) => {
  */
 ModelMock.clearModelObject = () => {
     ModelMock.object = {
-        save: jest.fn(),
+        save: jest.fn(() => {
+            ModelMock.object._id = ModelMock.object._id ? ModelMock.object._id : new Types.ObjectId()
+            ModelMock.addDocToCollection(ModelMock.object._id, ModelMock.object)
+        }),
     };
+
+    return ModelMock
 };
 
 ModelMock.addDocToCollection = (id, doc) => {
@@ -59,6 +66,14 @@ ModelMock.addDocToCollection = (id, doc) => {
 
     ModelMock.collection[id] = doc
     ModelMock.collection[id]._id = id
+
+    return ModelMock
+};
+
+ModelMock.clearCollection = (id, doc) => {
+    ModelMock.collection = {}
+
+    return ModelMock
 };
 
 ModelMock.clearModelObject();

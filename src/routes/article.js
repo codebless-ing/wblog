@@ -7,5 +7,6 @@ const controller = new ArticleController();
 
 router.post("/", controller.create);
 router.get("/:id", controller.read);
+router.put("/:id", controller.update);
 
 export default router;

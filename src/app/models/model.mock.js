@@ -50,6 +50,9 @@ ModelMock.clearModelObject = () => {
             ModelMock.object._id = ModelMock.object._id ? ModelMock.object._id : new Types.ObjectId()
             ModelMock.addDocToCollection(ModelMock.object._id, ModelMock.object)
         }),
+        delete: jest.fn(() => {
+            ModelMock.object._id = ModelMock.object._id ? delete ModelMock.collection[ModelMock.object._id] : false
+        })
     };
 
     return ModelMock

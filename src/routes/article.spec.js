@@ -132,4 +132,36 @@ describe("Article Controller", () => {
             });
         });
     });
+
+    describe("when deleting an article", () => {
+        beforeEach(() => {
+            ModelMock.addDocToCollection("6010", {});
+        });
+
+        describe("receiving a valid id", () => {
+            test("should return a page with 200", (done) => {
+                const res = request(app).delete("/article/6010").send();
+
+                res.expect("Content-Type", /html/).expect(200, done);
+            });
+        });
+
+        describe("receiving invalid data", () => {
+            test.skip("should return a page with 400", (done) => {
+                // TODO: This one depends on a view being returned with 400
+                const res = request(app).delete("/article/6010").send();
+
+                res.expect("Content-Type", /html/).expect(400, done);
+            });
+        });
+
+        describe("receiving an invalid id", () => {
+            test.skip("should return a page with 404", (done) => {
+                // TODO: Need an http sv mock making 404 pages
+                const res = request(app).delete("/article/0709").send();
+
+                res.expect("Content-Type", /html/).expect(404, done);
+            });
+        });
+    });
 });

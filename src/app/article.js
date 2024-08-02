@@ -50,5 +50,22 @@ export default {
             data: article,
             message: 'Article updated successfully'
         }
+    },
+
+    delete: async (id) => {
+        const article = await new Article(id);
+
+        if (!article._id) {
+            return {
+                data: false,
+                message: 'Article not found!'
+            }
+        }
+
+        article.delete()
+        return {
+            data: article,
+            message: 'Article deleted successfully'
+        }
     }
 }

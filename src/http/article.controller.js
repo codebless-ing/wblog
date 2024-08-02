@@ -74,6 +74,21 @@ class ArticleController extends BaseController {
         res.status(200)
         return res.render('article/index', { title: article.title, body: article.body, tags: article.tags });
     }
+
+    async delete(req, res) {
+        if (typeof req.params.id !== "string") {
+            throw new HttpException(400, 'Invalid data')
+        }
+
+        const result = await service.delete(req.params.id)
+
+        if (!result.data) {
+            throw new HttpException(404, result.message)
+        }
+
+        res.status(200)
+        return res.render('article/index', { title: result.message});
+    }
 }
 
 export default ArticleController;

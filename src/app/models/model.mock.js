@@ -24,7 +24,10 @@ ModelMock.GooseModel = class {
 /*
  * MODEL OBJECT
  */
-ModelMock.object = {};
+ModelMock.object = {
+    save: jest.fn(),
+    delete: jest.fn()
+};
 
 /*
  * MODEL CLASS
@@ -44,15 +47,28 @@ ModelMock.Class = jest.fn(async (id) => {
 /*
  * HELPERS
  */
-ModelMock.clearModelObject = () => {
-    ModelMock.object = {
-        save: jest.fn(() => {
+ModelMock.clearModelObject = (clearSpies = true) => {
+    let deleteMock = ModelMock.object.delete.mock;
+    let saveMock = ModelMock.object.save.mock;
+
+    if (clearSpies) {
+        saveMock = jest.fn(() => {
             ModelMock.object._id = ModelMock.object._id ? ModelMock.object._id : new Types.ObjectId()
             ModelMock.addDocToCollection(ModelMock.object._id, ModelMock.object)
-        }),
-        delete: jest.fn(() => {
-            ModelMock.object._id = ModelMock.object._id ? delete ModelMock.collection[ModelMock.object._id] : false
         })
+
+        deleteMock = jest.fn(() => {
+            if (ModelMock.collection[ModelMock.object._id]) {
+                delete ModelMock.collection[ModelMock.object._id];
+            }
+
+            ModelMock.clearModelObject();
+        })
+    }
+
+    ModelMock.object = {
+        save: saveMock,
+        delete: deleteMock
     };
 
     return ModelMock

@@ -75,7 +75,7 @@ describe("Article Controller", () => {
             });
         });
 
-        describe.skip("when receiving an invalid id", () => {
+        describe.skip("when receiving a non-existent id", () => {
             test("should return a page with 404", (done) => {
                 // TODO: Need an http sv mock making 404 pages
                 const res = request(app).get("/article/NotSoCoolId").send();
@@ -119,7 +119,7 @@ describe("Article Controller", () => {
             });
         });
 
-        describe("receiving an invalid id", () => {
+        describe("receiving a non-existent id", () => {
             test.skip("should return a page with 404", (done) => {
                 // TODO: Need an http sv mock making 404 pages
                 const res = request(app).put("/article/0709").type("form").send({
@@ -146,16 +146,7 @@ describe("Article Controller", () => {
             });
         });
 
-        describe("receiving invalid data", () => {
-            test.skip("should return a page with 400", (done) => {
-                // TODO: This one depends on a view being returned with 400
-                const res = request(app).delete("/article/6010").send();
-
-                res.expect("Content-Type", /html/).expect(400, done);
-            });
-        });
-
-        describe("receiving an invalid id", () => {
+        describe("receiving a non-existent id", () => {
             test.skip("should return a page with 404", (done) => {
                 // TODO: Need an http sv mock making 404 pages
                 const res = request(app).delete("/article/0709").send();

@@ -87,7 +87,7 @@ class ArticleController extends BaseController {
         }
 
         res.status(200)
-        return res.render('article/index', { title: result.message});
+        return res.render('article/index', { title: result.message });
     }
 }
 

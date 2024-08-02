@@ -123,12 +123,8 @@ describe("Article Service", () => {
             });
 
             test("should delete the data", async () => {
-
-
                 await ArticleService.delete(id);
-
                 expect(ModelMock.collection[id]).toBeUndefined();
-
             });
         });
     });

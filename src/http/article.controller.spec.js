@@ -106,7 +106,6 @@ describe("Article controller", () => {
             test("should respond with 200", async () => {
                 await controller.update(req, res);
 
-                expect(res.status).not.toThrow();
                 expect(res.status).toBeCalledWith(200);
             });
         });
@@ -133,7 +132,7 @@ describe("Article controller", () => {
                 req = {
                     params: {
                         id: "66a941da61910f79bb7e22c7",
-                    }
+                    },
                 };
                 ModelMock.addDocToCollection(req.params.id, {});
             });
@@ -141,7 +140,6 @@ describe("Article controller", () => {
             test("should respond with 200", async () => {
                 await controller.delete(req, res);
 
-                expect(res.status).not.toThrow();
                 expect(res.status).toBeCalledWith(200);
             });
         });

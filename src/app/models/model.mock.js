@@ -1,4 +1,4 @@
-import { Types } from 'mongoose'
+import { Types } from "mongoose";
 
 // Facade
 const ModelMock = {};
@@ -17,7 +17,7 @@ ModelMock.GooseModel = class {
             return ModelMock.collection[id];
         }
 
-        return {}
+        return {};
     });
 };
 
@@ -26,7 +26,7 @@ ModelMock.GooseModel = class {
  */
 ModelMock.object = {
     save: jest.fn(),
-    delete: jest.fn()
+    delete: jest.fn(),
 };
 
 /*
@@ -48,51 +48,51 @@ ModelMock.Class = jest.fn(async (id) => {
  * HELPERS
  */
 ModelMock.clearModelObject = (clearSpies = true) => {
-    let deleteMock = ModelMock.object.delete.mock;
-    let saveMock = ModelMock.object.save.mock;
-
     if (clearSpies) {
-        saveMock = jest.fn(() => {
-            ModelMock.object._id = ModelMock.object._id ? ModelMock.object._id : new Types.ObjectId()
-            ModelMock.addDocToCollection(ModelMock.object._id, ModelMock.object)
-        })
+        ModelMock.object = {
+            save: jest.fn(() => {
+                ModelMock.object._id = ModelMock.object._id ? ModelMock.object._id : new Types.ObjectId();
+                ModelMock.addDocToCollection(ModelMock.object._id, ModelMock.object);
+            }),
 
-        deleteMock = jest.fn(() => {
-            if (ModelMock.collection[ModelMock.object._id]) {
-                delete ModelMock.collection[ModelMock.object._id];
-            }
+            delete: (deleteSpy = jest.fn(() => {
+                if (ModelMock.collection[ModelMock.object._id]) {
+                    delete ModelMock.collection[ModelMock.object._id];
+                }
 
-            ModelMock.clearModelObject();
-        })
+                // When deleting a doc, clears the model's properties but keep the state of the spies
+                ModelMock.clearModelObject(false);
+            })),
+        };
+    } else {
+        ModelMock.object = {
+            save: ModelMock.object.save,
+            delete: ModelMock.object.delete,
+        };
     }
 
-    ModelMock.object = {
-        save: saveMock,
-        delete: deleteMock
-    };
-
-    return ModelMock
+    return ModelMock;
 };
 
 ModelMock.addDocToCollection = (id, doc) => {
     if (typeof id == "undefined") {
-        throw "An ID must be given"
+        throw "An ID must be given";
     }
 
     if (typeof doc !== "object") {
-        throw "Doc must be an object"
+        throw "Doc must be an object";
     }
 
-    ModelMock.collection[id] = doc
-    ModelMock.collection[id]._id = id
+    ModelMock.collection[id] = doc;
+    ModelMock.collection[id]._id = id;
 
-    return ModelMock
+    return ModelMock;
 };
 
 ModelMock.clearCollection = (id, doc) => {
-    ModelMock.collection = {}
+    ModelMock.collection = {};
 
-    return ModelMock
+    return ModelMock;
 };
 
 ModelMock.clearModelObject();

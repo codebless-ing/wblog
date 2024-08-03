@@ -106,7 +106,6 @@ describe("Article controller", () => {
             test("should respond with 200", async () => {
                 await controller.update(req, res);
 
-                expect(res.status).not.toThrow();
                 expect(res.status).toBeCalledWith(200);
             });
         });
@@ -120,6 +119,40 @@ describe("Article controller", () => {
 
             test("should throw a 404 HTTPException", () => {
                 expect(controller.update(req, res)).rejects.toThrow(HttpException);
+            });
+        });
+    });
+
+    // DELETE
+    describe("when deleting an article", () => {
+        describe("with valid data", () => {
+            let req = {};
+
+            beforeEach(() => {
+                req = {
+                    params: {
+                        id: "66a941da61910f79bb7e22c7",
+                    },
+                };
+                ModelMock.addDocToCollection(req.params.id, {});
+            });
+
+            test("should respond with 200", async () => {
+                await controller.delete(req, res);
+
+                expect(res.status).toBeCalledWith(200);
+            });
+        });
+
+        describe("with invalid data", () => {
+            const req = {
+                params: {
+                    id: false,
+                },
+            };
+
+            test("should throw a 404 HTTPException", () => {
+                expect(controller.delete(req, res)).rejects.toThrow(HttpException);
             });
         });
     });

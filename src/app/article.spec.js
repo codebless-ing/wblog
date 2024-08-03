@@ -102,4 +102,44 @@ describe("Article Service", () => {
             });
         });
     });
+
+    // DELETE
+    describe("when deleting an article", () => {
+        describe("with valid data", () => {
+            const id = "66a941da61910f79bb7e22c7";
+
+            beforeEach(() => {
+                ModelMock.addDocToCollection(id, {});
+            });
+
+            test("should have an Article Model with said data", async () => {
+                await ArticleService.delete(id);
+                expect(ArticleModel).toHaveBeenCalledTimes(1);
+            });
+
+            test("should request the new data to be deleted through db lib", async () => {
+                await ArticleService.delete(id);
+                expect(ModelMock.object.delete).toHaveBeenCalledTimes(1);
+            });
+
+            test("should delete the data", async () => {
+                await ArticleService.delete(id);
+                expect(ModelMock.collection[id]).toBeUndefined();
+            });
+        });
+
+        describe("when given id doesn't exist", () => {
+            const id = "66a941da61910f79bb7e22c7";
+
+            beforeEach(() => {
+                ModelMock.addDocToCollection(id, {});
+            });
+
+            // TODO: Update this when Dtos are implemented
+            test("should return false for the data", async () => {
+                const result = await ArticleService.delete("0709");
+                expect(result.data).toBe(false);
+            });
+        });
+    });
 });

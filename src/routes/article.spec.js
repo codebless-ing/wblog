@@ -75,7 +75,7 @@ describe("Article Controller", () => {
             });
         });
 
-        describe.skip("when receiving an invalid id", () => {
+        describe.skip("when receiving a non-existent id", () => {
             test("should return a page with 404", (done) => {
                 // TODO: Need an http sv mock making 404 pages
                 const res = request(app).get("/article/NotSoCoolId").send();
@@ -119,7 +119,7 @@ describe("Article Controller", () => {
             });
         });
 
-        describe("receiving an invalid id", () => {
+        describe("receiving a non-existent id", () => {
             test.skip("should return a page with 404", (done) => {
                 // TODO: Need an http sv mock making 404 pages
                 const res = request(app).put("/article/0709").type("form").send({
@@ -127,6 +127,29 @@ describe("Article Controller", () => {
                     body: "Basically, I just put 'featuring AsbelianKeys' on the cover and we were sold out of physical (and digital) medias in 9 hours.",
                     tags: "gamedev; marketing",
                 });
+
+                res.expect("Content-Type", /html/).expect(404, done);
+            });
+        });
+    });
+
+    describe("when deleting an article", () => {
+        beforeEach(() => {
+            ModelMock.addDocToCollection("6010", {});
+        });
+
+        describe("receiving a valid id", () => {
+            test("should return a page with 200", (done) => {
+                const res = request(app).delete("/article/6010").send();
+
+                res.expect("Content-Type", /html/).expect(200, done);
+            });
+        });
+
+        describe("receiving a non-existent id", () => {
+            test.skip("should return a page with 404", (done) => {
+                // TODO: Need an http sv mock making 404 pages
+                const res = request(app).delete("/article/0709").send();
 
                 res.expect("Content-Type", /html/).expect(404, done);
             });

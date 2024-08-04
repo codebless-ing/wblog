@@ -33,7 +33,7 @@ jobs:
               with:
                   auth: ${{ secrets.GIST_SECRET }}
                   gistID: ${{ secrets.GIST_ID }}
-                  filename: blog__${{ env.BRANCH }}.json
+                  filename: wblog__${{ env.BRANCH }}.json
                   label: Test Coverage
                   message: ${{ env.COVERAGE }}
                   color: green

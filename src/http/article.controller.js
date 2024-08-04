@@ -1,94 +1,72 @@
-import BaseController from "@controllers/controller.js";
-import service from "@services/article.js"
+import { CreateArticleInputDto } from "@common/dto/article/create.dto.js";
+import { ReadArticleInputDto } from "@common/dto/article/read.dto.js";
+import { UpdateArticleInputDto } from "@common/dto/article/update.dto.js";
+import { DeleteArticleInputDto } from "@common/dto/article/delete.dto.js";
 import { HttpException } from "@common/exceptions/appExceptions.js";
 
+import BaseController from "@controllers/controller.js";
+import service from "@services/article.js";
+
 class ArticleController extends BaseController {
-    async create(req, res) {
-        // => TODO: Data validation
+    create = async (req, res) => {
+        try {
+            const dto = new CreateArticleInputDto(req.body);
+            const result = await service.create(dto);
 
-        const data = req.body
-
-        // Temporary validation
-        if (
-            !data || typeof data.title !== "string" || data.title.length < 3 || data.title.length > 250 ||
-            typeof data.body !== "string" || data.body.length < 3 || data.body.length > 5000 ||
-            typeof data.tags !== "string" || data.tags.length < 2 || data.tags.length > 5000
-        ) {
-            throw new HttpException(400, "Invalid data")
+            res.status(200);
+            return res.send(`Article [${result._id}] created successfully!`);
+        } catch (error) {
+            this.reportBadData(error, req.body);
         }
+    };
 
-        // => TODO: Contract
-        await service.create({
-            title: data.title,
-            body: data.body,
-            tags: data.tags.split(";")
-        })
+    read = async (req, res) => {
+        try {
+            const dto = new ReadArticleInputDto({ id: req.params.id });
+            const result = await service.read(dto);
 
-        res.status(200)
-        return res.send("Article created successfully!");
-    }
+            if (!result.success) {
+                throw new HttpException(404, result.info);
+            }
 
-    async read(req, res) {
-        if (typeof req.params.id !== "string") {
-            throw new HttpException(400, 'Invalid data')
+            res.status(200);
+            return res.render("article/index", { title: result.title, body: result.body, tags: result.tags });
+        } catch (error) {
+            this.reportBadData(error, req.body);
         }
+    };
 
-        const result = await service.read(req.params.id)
+    update = async (req, res) => {
+        try {
+            const dto = new UpdateArticleInputDto({ id: req.params.id, ...req.body });
+            const result = await service.update(dto);
 
-        const article = result.data
+            if (!result.success) {
+                throw new HttpException(404, result.info);
+            }
 
-        if (!article) {
-            throw new HttpException(404, result.message)
+            res.status(200);
+            return res.render("article/index", { title: result.title, body: result.body, tags: result.tags });
+        } catch (error) {
+            this.reportBadData(error, req.body);
         }
+    };
 
-        res.status(200)
-        return res.render('article/index', { title: article.title, body: article.body, tags: article.tags });
-    }
+    delete = async (req, res) => {
+        try {
+            const dto = new DeleteArticleInputDto({ id: req.params.id });
+            const result = await service.delete(dto);
 
-    async update(req, res) {
-        const data = req.body
+            if (!result.success) {
+                throw new HttpException(404, result.info);
+            }
 
-        // Temporary validation, you're really taking your time with it huh
-        if (
-            typeof req.params.id !== "string" || !req.params.id || !data || typeof data.title !== "string" || data.title.length < 3 || data.title.length > 250 ||
-            typeof data.body !== "string" || data.body.length < 3 || data.body.length > 5000 ||
-            typeof data.tags !== "string" || data.tags.length < 2 || data.tags.length > 5000
-        ) {
-            throw new HttpException(400, "Invalid data")
+            res.status(200);
+            return res.render("article/index", { title: result.info });
+        } catch (error) {
+            this.reportBadData(error, req.body);
         }
-
-        const newArticle = {
-            id: req.params.id,
-            title: data.title,
-            body: data.body,
-            tags: data.tags.split(";")
-        }
-
-        const result = await service.update(newArticle)
-        const article = result.data
-
-        if (!article) {
-            throw new HttpException(404, result.message)
-        }
-
-        res.status(200)
-        return res.render('article/index', { title: article.title, body: article.body, tags: article.tags });
-    }
-
-    async delete(req, res) {
-        if (typeof req.params.id !== "string") {
-            throw new HttpException(400, 'Invalid data')
-        }
-
-        const result = await service.delete(req.params.id)
-
-        if (!result.data) {
-            throw new HttpException(404, result.message)
-        }
-
-        res.status(200)
-        return res.render('article/index', { title: result.message });
-    }
+    };
 }
 
 export default ArticleController;

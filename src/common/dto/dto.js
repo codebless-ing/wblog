@@ -11,7 +11,7 @@ class BaseOutputDto {
     success;
 
     constructor(success, info) {
-        info = typeof info == "array" ? info : [info];
+        info = Array.isArray(info) ? info : [info];
         let dtoInfo = [];
 
         // Save only the string values to a temporary array (dtoInfo)

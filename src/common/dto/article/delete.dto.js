@@ -14,7 +14,7 @@ class DeleteArticleInputDto {
 class DeleteArticleOutputDto extends BaseOutputDto {
     data;
 
-    constructor({}, success = true, info) {
+    constructor(_, success = true, info) {
         super(success, info);
     }
 }

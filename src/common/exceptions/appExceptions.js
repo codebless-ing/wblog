@@ -6,39 +6,43 @@ const httpReasons = {
     404: "NotFound",
     405: "MethodNotAllowed",
     418: "ImATeapot", // Important!
-    500: "InternalServerError"
-}
+    500: "InternalServerError",
+};
 
 class ModelException extends Error {
-    layer = "Model"
-    isOperational = true
+    layer = "Model";
+    isOperational = true;
 
     constructor(name, message, { isOperational } = {}) {
         super(name, message);
 
-        this.isOperational = isOperational ?? isOperational
+        this.isOperational = isOperational ?? isOperational;
     }
 }
 
 class HttpException extends Error {
-    layer = "Controller"
-    isOperational = true
-    httpMessage = "" // For communicating custom messages to the client
-    httpReason = "" // Reason for the statusCode
+    layer = "Controller";
+    isOperational = true;
+    httpMessage = ""; // For communicating custom messages to the client
+    httpReason = ""; // Reason for the statusCode
 
     constructor(status, httpMessage, { isOperational, name, message } = {}) {
-        name = name ?? "Http Exception"
-        message = message ?? ""
+        name = name ?? "Http Exception";
+        message = message ?? "";
         super(name, message);
-        this.httpMessage = httpMessage ?? this.httpMessage
-        this.isOperational = isOperational ?? this.isOperational
-        this.statusCode = typeof status === "number" && typeof httpReasons[status] == "string" ? status : 500
+        this.httpMessage = httpMessage ?? this.httpMessage;
+        this.isOperational = isOperational ?? this.isOperational;
+        this.statusCode = typeof status === "number" && typeof httpReasons[status] == "string" ? status : 500;
+    }
+
+    get statusCode() {
+        return this._statusCode;
     }
 
     set statusCode(status) {
-        this.httpReason = httpReasons[status] ?? this.httpReason
+        this._statusCode = status;
+        this.httpReason = httpReasons[status] ?? this.httpReason;
     }
-
 }
 
 export { ModelException, HttpException };

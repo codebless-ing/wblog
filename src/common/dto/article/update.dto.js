@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { BaseOutputDto } from "../dto";
+import { BaseOutputDto } from "../dto.js";
 
 class UpdateArticleInputDto {
     static SCHEMA = Joi.object({

@@ -12,9 +12,9 @@ const service = (await import("@services/article.js")).default;
  * RESPONSE STUB
  */
 const res = {
-    send: jest.fn(() => {}),
-    status: jest.fn(() => {}),
-    render: jest.fn(() => {}),
+    send: jest.fn(() => res),
+    status: jest.fn(() => res),
+    render: jest.fn(() => res),
 };
 
 /*

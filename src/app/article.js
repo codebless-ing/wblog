@@ -1,71 +1,61 @@
-import Article from '@models/article.model.js'
+import Article from "@models/article.model.js";
+import { CreateArticleOutputDto } from "@common/dto/article/create.dto.js";
+import { ReadArticleOutputDto } from "@common/dto/article/read.dto.js";
+import { UpdateArticleOutputDto } from "@common/dto/article/update.dto.js";
+import { DeleteArticleOutputDto } from "@common/dto/article/delete.dto.js";
 
 export default {
-    create: async ({title, body, tags}) => {
+    create: async ({ title, body, tags }) => {
         const article = await new Article();
 
-        article.title = title
-        article.body = body
-        article.tags = tags
+        article.title = title;
+        article.body = body;
+        article.tags = tags;
 
-        // TODO: user_id and timezone must be implemented after authentication
-        article.save()
+        // TODO: user_id and timezone must be included after authentication is implemented
+        article.save();
+
+        return new CreateArticleOutputDto(article);
     },
 
-    read: async (id) => {
+    read: async ({id}) => {
         const article = await new Article(id);
 
         if (!article._id) {
-            return {
-                data: false,
-                message: 'Article not found!'
-            }
+            return new ReadArticleOutputDto({}, false, "Article not found");
         }
 
-        return {
-            data: article,
-            message: 'Article found!'
-        }
+        return new ReadArticleOutputDto(article, true, "Article found");
     },
 
     // Receives object with id, title, body and tags
     // If id exists: returns object with data (_id, title, body and tags) and a feedback message
     // If id doesn't exist: returns object with data (false) and a feedback message
-    update: async (data) => {
-        const article = await new Article(data.id);
-
-        if (!article._id) {
-            return {
-                data: false,
-                message: 'Article not found!'
-            }
-        }
-
-        article.title = data.title
-        article.body = data.body
-        article.tags = data.tags
-
-        article.save()
-        return {
-            data: article,
-            message: 'Article updated successfully'
-        }
-    },
-
-    delete: async (id) => {
+    update: async ({ id, title, body, tags }) => {
         const article = await new Article(id);
 
         if (!article._id) {
-            return {
-                data: false,
-                message: 'Article not found!'
-            }
+            return new UpdateArticleOutputDto({}, false, "Article not found");
         }
 
-        article.delete()
-        return {
-            data: article,
-            message: 'Article deleted successfully'
+        article.title = title;
+        article.body = body;
+        article.tags = tags;
+
+        article.save();
+
+        return new UpdateArticleOutputDto(article, true, "Article updated successfully");
+    },
+
+    delete: async ({id}) => {
+        const article = await new Article(id);
+
+        if (!article._id) {
+            return new DeleteArticleOutputDto({}, false, "Article not found");
         }
-    }
-}
+
+        article.delete();
+
+        return new DeleteArticleOutputDto({}, true, "Article deleted successfully");
+    },
+};

@@ -1,5 +1,5 @@
 {
-  "name": "blog",
+  "name": "wlog",
   "version": "1.0.0",
   "description": "Simplest CMS to ever exist",
   "exports": "./src/app.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codebless-ing/blog.git"
+    "url": "git+https://github.com/codebless-ing/wlog.git"
   },
   "author": "Chrystian & Matheus",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/codebless-ing/blog/issues"
+    "url": "https://github.com/codebless-ing/wlog/issues"
   },
-  "homepage": "https://github.com/codebless-ing/blog#readme",
+  "homepage": "https://github.com/codebless-ing/wlog#readme",
   "dependencies": {
     "dotenv": "^16.4.5",
     "esm-module-alias": "^2.2.0",

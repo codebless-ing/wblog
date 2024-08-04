@@ -13,8 +13,7 @@ class ArticleController extends BaseController {
             const dto = new CreateArticleInputDto(req.body);
             const result = await service.create(dto);
 
-            res.status(200);
-            return res.send(`Article [${result._id}] created successfully!`);
+            return res.status(200).send(`Article [${result._id}] created successfully!`);
         } catch (error) {
             this.reportBadData(error, req.body);
         }
@@ -29,8 +28,7 @@ class ArticleController extends BaseController {
                 throw new HttpException(404, result.info);
             }
 
-            res.status(200);
-            return res.render("article/index", { title: result.title, body: result.body, tags: result.tags });
+            return res.status(200).render("article/index", result.data);
         } catch (error) {
             this.reportBadData(error, req.body);
         }
@@ -45,8 +43,7 @@ class ArticleController extends BaseController {
                 throw new HttpException(404, result.info);
             }
 
-            res.status(200);
-            return res.render("article/index", { title: result.title, body: result.body, tags: result.tags });
+            return res.status(200).render("article/index", { title: result.title, body: result.body, tags: result.tags });
         } catch (error) {
             this.reportBadData(error, req.body);
         }
@@ -61,8 +58,7 @@ class ArticleController extends BaseController {
                 throw new HttpException(404, result.info);
             }
 
-            res.status(200);
-            return res.render("article/index", { title: result.info });
+            return res.status(200).render("article/index", { title: result.info });
         } catch (error) {
             this.reportBadData(error, req.body);
         }

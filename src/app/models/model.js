@@ -1,10 +1,10 @@
-import { Schema, mongoose } from 'mongoose'
-import { ModelException } from '@common/exceptions/appExceptions.js';
+import { Schema, mongoose } from "mongoose";
+import { ModelException } from "@common/exceptions/appExceptions.js";
 import { newLogger } from "@common/utils/logger.js";
-const logger = newLogger("Model|BaseModel")
+const logger = newLogger("Model|BaseModel");
 
 // This class and all its children are instantiated as a promise
-class BaseModel {
+export default class BaseModel {
     #model; // Mongoose Model class      see: https://mongoosejs.com/docs/models.html
     #doc; // Mongoose Document class     see: https://mongoosejs.com/docs/documents.html
 
@@ -13,7 +13,7 @@ class BaseModel {
         return (async () => {
             // Throw an exception for models without schema
             if (!(this.constructor.SCHEMA instanceof Schema)) {
-                throw new ModelException({ message: `Model "${this.constructor.name}" must have a valid schema` })
+                throw new ModelException({ message: `Model "${this.constructor.name}" must have a valid schema` });
             }
 
             // Create and store the Mongoose model for this collection
@@ -21,38 +21,39 @@ class BaseModel {
 
             // Existing document
             if (id) {
-                if (mongoose.isValidObjectId(id)) { // Don't try to find if it's not even a validObjectId
-                    this.#doc = await this.#model.findById(id)
+                if (mongoose.isValidObjectId(id)) {
+                    // Don't try to find if it's not even a validObjectId
+                    this.#doc = await this.#model.findById(id);
                 }
 
                 // Copy the properties from the Mongoose doc to the model object
                 if (this.#doc) {
-                    for(let k in this.#doc._doc) {
-                        this[k] = this.#doc._doc[k]
+                    for (let k in this.#doc._doc) {
+                        this[k] = this.#doc._doc[k];
                     }
 
-                    return this
+                    return this;
                 }
 
-                logger.info("Document not found. Creating a new one.")
+                logger.info("Document not found. Creating a new one.");
             }
 
             // New document
             this.#doc = new this.#model();
 
-            return this
-        })().catch(err => {
-            logger.error(err)
-            throw new ModelException({ message: err })
+            return this;
+        })().catch((err) => {
+            logger.error(err);
+            throw new ModelException({ message: err });
         });
     }
 
     async save() {
         // Copy the model object properties back to Moongose doc
-        for(let k in this) {
-            this.#doc[k] = this[k]
+        for (let k in this) {
+            this.#doc[k] = this[k];
         }
-        
+
         await this.#doc.save();
     }
 
@@ -61,8 +62,6 @@ class BaseModel {
         for (let k in this) {
             delete this[k];
         }
-        this.#doc = this.#model = null
+        this.#doc = this.#model = null;
     }
 }
-
-export default BaseModel;

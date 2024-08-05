@@ -3,7 +3,7 @@ import { BaseOutputDto } from "../dto.js";
 
 class CreateArticleInputDto {
     static SCHEMA = Joi.object({
-        title: Joi.string().min(3).max(500).required(),
+        title: Joi.string().min(3).max(250).required(),
         body: Joi.string().max(500000).required(),
         tags: Joi.array().items(Joi.string().min(2).max(30).pattern(new RegExp("^[A-z0-9 _-]*$"))),
         // Regex: alphanum + whitespace + underscore + dash

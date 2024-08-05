@@ -13,6 +13,10 @@ class ArticleController extends BaseController {
             const dto = new CreateArticleInputDto(req.body);
             const result = await service.create(dto);
 
+            if (!result.success) {
+                throw new HttpException(400, result.info);
+            }
+
             return res.status(200).send(`Article [${result._id}] created successfully!`);
         } catch (error) {
             this.reportBadData(error, req.body);

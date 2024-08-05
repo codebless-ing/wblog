@@ -13,7 +13,12 @@ export default {
         article.tags = tags;
 
         // TODO: user_id and timezone must be included after authentication is implemented
-        article.save();
+        try {
+            await article.save();
+        } catch (error) {
+            //error.errors.properties.message
+            return new CreateArticleOutputDto({}, false, JSON.stringify(error.errors))
+        }
 
         return new CreateArticleOutputDto(article);
     },
@@ -42,7 +47,12 @@ export default {
         article.body = body;
         article.tags = tags;
 
-        article.save();
+        try {
+            await article.save();
+        } catch (error) {
+            //error.errors.properties.message
+            return new CreateArticleOutputDto({}, false, JSON.stringify(error.errors))
+        }
 
         return new UpdateArticleOutputDto(article, true, "Article updated successfully");
     },

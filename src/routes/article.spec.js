@@ -1,23 +1,9 @@
 const request = (await import("supertest")).default;
-const express = (await import("express")).default;
-
 const ModelMock = (await import("@models/model.mock.js")).default;
 const ArticleRoute = (await import("@routes/article.js")).default;
 
-const app = new express();
-
-/*
- *  HTTP SERVER MOCK
- */
-app.set("view engine", "pug");
-app.set("views", "./src/resources/views");
-app.engine("pug", (path, options, callback) => {
-    const details = Object.assign({ path }, options);
-    callback(null, JSON.stringify(details));
-});
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use("/article", ArticleRoute);
+const app = (await import("../app.mock.js")).default;
+import "express-async-errors";
 
 afterEach(() => {
     ModelMock.clearModelObject().clearCollection();
@@ -76,9 +62,8 @@ describe("Article Controller", () => {
             });
         });
 
-        describe.skip("when receiving a non-existent id", () => {
+        describe("when receiving a non-existent id", () => {
             test("should return a page with 404", (done) => {
-                // TODO: Need an http sv mock making 404 pages
                 const res = request(app).get("/article/NotSoCoolId").send();
 
                 res.expect("Content-Type", /html/).expect(404, done);
@@ -121,9 +106,8 @@ describe("Article Controller", () => {
         });
 
         describe("receiving a non-existent id", () => {
-            test.skip("should return a page with 404", (done) => {
-                // TODO: Need an http sv mock making 404 pages
-                const res = request(app).put("/article/0709").type("form").send({
+            test("should return a page with 404", (done) => {
+                const res = request(app).put("/article/070907090709070907090709").type("form").send({
                     title: "My experiences with marketing my game",
                     body: "Basically, I just put 'featuring AsbelianKeys' on the cover and we were sold out of physical (and digital) medias in 9 hours.",
                     tags: ["gamedev", "marketing"],
@@ -148,8 +132,7 @@ describe("Article Controller", () => {
         });
 
         describe("receiving a non-existent id", () => {
-            test.skip("should return a page with 404", (done) => {
-                // TODO: Need an http sv mock making 404 pages
+            test("should return a page with 404", (done) => {
                 const res = request(app).delete("/article/0709").send();
 
                 res.expect("Content-Type", /html/).expect(404, done);

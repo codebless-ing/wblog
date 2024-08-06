@@ -6,11 +6,13 @@ class Article extends BaseModel {
         title: {
             type: String,
             minLength: [3, "Title must have at least 3 characters"],
-            maxLength: 250
+            maxLength: 250,
+            required: [true, "Title is a required field"]
         },
         body: {
             type: String,
-            maxLength: 500000
+            maxLength: 500000,
+            required: [true, "Body is a required field"]
         },
         tags: {
             type: [String],
@@ -20,8 +22,8 @@ class Article extends BaseModel {
                         return false
                     }
                 }
-                return value.length > 0 && value.length <= 10
-            }, 'Needs at least 1 tag, max of 10 and must have at least 2 characters']
+                return value.length <= 10
+            }, 'You can only have a max of 10 tags and each of them must have at least 2 characters']
         },
         user_id: String,
         timezone: {

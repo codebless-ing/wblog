@@ -13,17 +13,15 @@ body {
 #navbar {
     display: flex;
     justify-content: space-between;
-    align-items: center;
 
     a {
         color: $accent-colour;
         text-decoration: none;
         padding: 1ex;
     }
-}
-
-#teste {
-    display: flex;
+    img {
+        vertical-align: top;
+    }
 }
 
 hr {

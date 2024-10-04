@@ -5,6 +5,7 @@ logs/
 
 # Environment
 .env
+.vscode
 
 # code testing coverage
 coverage/

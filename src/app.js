@@ -16,6 +16,11 @@ const app = express();
 
 app.set("view engine", "pug");
 app.set("views", "./src/resources/views");
+app.locals.basedir = app.get('views');
+
+// Serving static files
+app.use(express.static('public'))
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

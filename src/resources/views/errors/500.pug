@@ -1,8 +1,8 @@
-html
-  head
-    title Internal Server Error!
-  body
-    h1 Internal Server Error! 😵
-    p= message
-    | !{reason}
-    
+extends /layout/app.pug
+
+block content
+  h1
+    center
+      h1 Internal Server Error! 😵
+      p= message
+      | !{reason}

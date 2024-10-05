@@ -1,9 +1,11 @@
 node_modules/
 dist/
+public/
 logs/
 
 # Environment
 .env
+.vscode
 
 # code testing coverage
 coverage/

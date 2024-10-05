@@ -1,14 +1,11 @@
+/* eslint-disable no-console */
+// console is allowed in this script for it isn't expected to log info through the logger system
 import { readFile, writeFile } from "node:fs/promises";
 import fs from "node:fs";
 import { getIconsCSS } from "@iconify/utils";
 import { locate } from "@iconify/json";
 
-/**
- * List of icons. Key is icon set prefix, value is array of icons
- *
- * @type {Record<string, string[]>}
- */
-import icons from "../src/resources/assets/icons.json" with { type: "json" };
+import icons from "@resources/assets/icons.js";
 
 const outputDir = "./public/css";
 

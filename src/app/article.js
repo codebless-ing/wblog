@@ -68,4 +68,13 @@ export default {
 
         return new DeleteArticleOutputDto({}, true, "Article deleted successfully");
     },
+
+    list: async({ title, tags }) => {
+        const article = await new Article();
+
+        article.title = title;
+        article.tags = tags;
+
+        return article.find();
+    },
 };

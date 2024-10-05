@@ -64,4 +64,17 @@ export default class BaseModel {
         }
         this.#doc = this.#model = null;
     }
+
+    async find() {
+        const query = this.#model.find()
+        // TODO Iterate through array
+        // If searching for tags it'll not return if the array has more than one index
+        for (let k in this) {
+            if (this[k] && this[k] != '') {
+                query.find( {[k]: {$regex: String(this[k])}} )
+            }
+        }
+
+        return query.find();
+    }
 }

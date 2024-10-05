@@ -2,6 +2,7 @@ import { CreateArticleInputDto } from "@common/dto/article/create.dto.js";
 import { ReadArticleInputDto } from "@common/dto/article/read.dto.js";
 import { UpdateArticleInputDto } from "@common/dto/article/update.dto.js";
 import { DeleteArticleInputDto } from "@common/dto/article/delete.dto.js";
+import { ListArticleInputDto } from "@common/dto/article/list.dto.js";
 import { HttpException } from "@common/exceptions/appExceptions.js";
 
 import BaseController from "@controllers/controller.js";
@@ -67,6 +68,17 @@ class ArticleController extends BaseController {
             this.reportBadData(error, req.body);
         }
     };
+
+    list = async (req, res) => {
+        try {
+            const dto = new ListArticleInputDto(req.body)
+            const result = await service.list(dto);
+
+            return res.status(200).render("article/list", { body: result });
+        } catch (error) {
+            this.reportBadData(error, req.body);
+        };
+    }
 }
 
 export default ArticleController;

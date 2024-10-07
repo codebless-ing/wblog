@@ -69,9 +69,9 @@ export default class BaseModel {
         const query = this.#model.find()
         for (let k in this) {
             if (this[k]) {
-                if (k == "tags") {
-                    for (let l of this[k]) {
-                        query.or( {[k]: {$regex: String(l)}} )
+                if (Array.isArray(this[k])) {
+                    for (let val of this[k]) {
+                        query.or( {[k]: {$regex: String(val)}} )
                     }
                 } else {
                     query.find( {[k]: {$regex: String(this[k])}} )

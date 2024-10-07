@@ -67,11 +67,15 @@ export default class BaseModel {
 
     async find() {
         const query = this.#model.find()
-        // TODO Iterate through array
-        // If searching for tags it'll not return if the array has more than one index
         for (let k in this) {
-            if (this[k] && this[k] != '') {
-                query.find( {[k]: {$regex: String(this[k])}} )
+            if (this[k]) {
+                if (k == "tags") {
+                    for (let l of this[k]) {
+                        query.or( {[k]: {$regex: String(l)}} )
+                    }
+                } else {
+                    query.find( {[k]: {$regex: String(this[k])}} )
+                }
             }
         }
 

@@ -3,6 +3,7 @@ import { CreateArticleOutputDto } from "@common/dto/article/create.dto.js";
 import { ReadArticleOutputDto } from "@common/dto/article/read.dto.js";
 import { UpdateArticleOutputDto } from "@common/dto/article/update.dto.js";
 import { DeleteArticleOutputDto } from "@common/dto/article/delete.dto.js";
+import { ListArticleOutputDto } from "@common/dto/article/list.dto.js";
 
 export default {
     create: async ({ title, body, tags }) => {
@@ -75,6 +76,6 @@ export default {
         article.title = title;
         article.tags = tags;
 
-        return article.find();
+        return new ListArticleOutputDto(await article.find(), true);
     },
 };

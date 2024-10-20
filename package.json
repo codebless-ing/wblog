@@ -55,6 +55,7 @@
     "@controllers": "src/http",
     "@services": "src/app",
     "@models": "src/app/models",
+    "@repositories": "src/app/repositories",
     "@common": "src/common",
     "@middlewares": "src/common/middlewares",
     "@resources": "src/resources"

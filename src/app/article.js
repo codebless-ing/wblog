@@ -4,6 +4,9 @@ import { ReadArticleOutputDto } from "@common/dto/article/read.dto.js";
 import { UpdateArticleOutputDto } from "@common/dto/article/update.dto.js";
 import { DeleteArticleOutputDto } from "@common/dto/article/delete.dto.js";
 import { ListArticleOutputDto } from "@common/dto/article/list.dto.js";
+import ArticleRepository from "@repositories/article.repository.js";
+
+const repository = new ArticleRepository();
 
 export default {
     create: async ({ title, body, tags }) => {
@@ -71,11 +74,8 @@ export default {
     },
 
     list: async({ title, tags }) => {
-        const article = await new Article();
+        const articles = await repository.filter(title, tags);
 
-        article.title = title;
-        article.tags = tags;
-
-        return new ListArticleOutputDto(await article.find(), true);
+        return new ListArticleOutputDto(articles, true);
     },
 };

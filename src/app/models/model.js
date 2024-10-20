@@ -65,20 +65,7 @@ export default class BaseModel {
         this.#doc = this.#model = null;
     }
 
-    async find() {
-        const query = this.#model.find()
-        for (let k in this) {
-            if (this[k]) {
-                if (Array.isArray(this[k])) {
-                    for (let val of this[k]) {
-                        query.or( {[k]: {$regex: String(val)}} )
-                    }
-                } else {
-                    query.find( {[k]: {$regex: String(this[k])}} )
-                }
-            }
-        }
-
-        return query.find();
+    async find(filter) {
+        return await this.#model.find(filter);
     }
 }

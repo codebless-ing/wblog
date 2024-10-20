@@ -48,7 +48,9 @@ class ArticleController extends BaseController {
                 throw new HttpException(404, result.info);
             }
 
-            return res.status(200).render("article/index", { title: result.title, body: result.body, tags: result.tags });
+            return res
+                .status(200)
+                .render("article/index", { title: result.title, body: result.body, tags: result.tags });
         } catch (error) {
             this.reportBadData(error, req.body);
         }
@@ -72,9 +74,9 @@ class ArticleController extends BaseController {
     list = async (req, res) => {
         try {
             if (req.query.tags) {
-                req.query.tags = req.query.tags.split(",")
+                req.query.tags = req.query.tags.split(",");
             } else {
-                req.query.tags = []
+                req.query.tags = [];
             }
 
             const dto = new ListArticleInputDto(req.query);
@@ -83,8 +85,8 @@ class ArticleController extends BaseController {
             return res.status(200).render("article/list", { body: result.data });
         } catch (error) {
             this.reportBadData(error, req.body);
-        };
-    }
+        }
+    };
 }
 
 export default ArticleController;

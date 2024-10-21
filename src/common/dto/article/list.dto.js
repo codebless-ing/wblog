@@ -8,10 +8,16 @@ class ListArticleInputDto {
     }).options({ abortEarly: false });
 
     constructor(data) {
+        if (typeof data.tags == "string") {
+            data.tags = data.tags.split(",");
+        } else {
+            data.tags = Array.isArray(data.tags) ? data.tags : [];
+        }
+
         data = Joi.attempt(data, this.constructor.SCHEMA);
 
         this.title = typeof data.title == "string" ? data.title : "";
-        this.tags = typeof data.tags == "array" ? data.tags : [];
+        this.tags = data.tags;
     }
 }
 

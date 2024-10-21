@@ -76,6 +76,6 @@ export default {
     list: async ({ title, tags }) => {
         const articles = await repository.filter(title, tags);
 
-        return new ListArticleOutputDto(articles, true);
+        return new ListArticleOutputDto(articles, true, "Articles fetched");
     },
 };

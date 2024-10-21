@@ -1,9 +1,6 @@
 form(role='form' method='GET' action='/article')
-  div
-    label(for="title") Title:
+  div.searchInput.fluid
+    span.icon-magnify
     input(type="text" placeholder="Title" name="title")
-    br
-    label(for="tags") Tags:
-    input(type="text" placeholder="Tags" name="tags")
-    button(type="submit") Submit
+    button(type="submit") Search
   hr

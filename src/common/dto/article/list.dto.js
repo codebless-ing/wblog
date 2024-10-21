@@ -10,8 +10,8 @@ class ListArticleInputDto {
     constructor(data) {
         data = Joi.attempt(data, this.constructor.SCHEMA);
 
-        this.title = data.title;
-        this.tags = data.tags;
+        this.title = typeof data.title == "string" ? data.title : "";
+        this.tags = typeof data.tags == "array" ? data.tags : [];
     }
 }
 

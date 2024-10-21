@@ -73,12 +73,6 @@ class ArticleController extends BaseController {
 
     list = async (req, res) => {
         try {
-            if (req.query.tags) {
-                req.query.tags = req.query.tags.split(",");
-            } else {
-                req.query.tags = [];
-            }
-
             const dto = new ListArticleInputDto(req.query);
             const result = await service.list(dto);
 

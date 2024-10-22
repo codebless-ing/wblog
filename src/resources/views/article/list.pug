@@ -5,11 +5,11 @@ block content
   div.articleList
     each val in body
       div.articleItem
-        a.title(href="/article/"+val._id)=val.title
+        a.title(href=routes.articleRead({ id: val._id.toString() }))=val.title
         div.body=val.body
         if val.tags[0]
           div.tags
             i.icon-tag-multiple
             each tag, i in val.tags
               - var text = " " + (i == val.tags.length - 1 ? tag : tag + ",")
-              a(href="/article/?tags="+tag)=text
+              a(href=routes.articleList({}, { tags: tag }))=text

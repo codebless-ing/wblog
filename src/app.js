@@ -1,6 +1,8 @@
 import express from "express";
 import "express-async-errors";
 
+import { NamedRouter, routes as registeredRoutes } from "reversical";
+
 import config from "./config.js";
 import { connectToDatabase } from "@models/index.js";
 import { errorHandler, logErrors, notFoundHandler } from "@middlewares/errorHandler.js";
@@ -13,10 +15,14 @@ await connectToDatabase(config.db.uri, config.db.user, config.db.pass, config.db
 
 /* HTTP */
 const app = express();
+const router = new NamedRouter(app)
 
 app.set("view engine", "pug");
 app.set("views", "./src/resources/views");
+
+// Data provided to the view-stack
 app.locals.basedir = app.get('views');
+app.locals.routes = registeredRoutes;
 
 // Serving static files
 app.use(express.static('public'))
@@ -24,7 +30,7 @@ app.use(express.static('public'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", routes);
+router.use("/", routes);
 
 /** Error handling */
 app.use(logErrors);

@@ -76,7 +76,7 @@ class ArticleController extends BaseController {
             const dto = new ListArticleInputDto(req.query);
             const result = await service.list(dto);
 
-            return res.status(200).render("article/list", { body: result.data });
+            return res.status(200).render("article/list", { body: result.data, query: req.query });
         } catch (error) {
             this.reportBadData(error, req.body);
         }

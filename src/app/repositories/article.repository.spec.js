@@ -11,14 +11,10 @@ describe("Article repository", () => {
                 title: { $regex: "vey", $options: "i" },
                 $or: [
                     {
-                        tags: {
-                            $regex: "fi",
-                        },
+                        tags: "fi",
                     },
                     {
-                        tags: {
-                            $regex: "dum",
-                        },
+                        tags: "dum",
                     },
                 ],
             });

@@ -14,7 +14,7 @@ class ArticleRepository {
             query.$or = [];
 
             for (let tag of tags) {
-                query.$or.push({ tags: { $regex: String(tag) } });
+                query.$or.push({ tags: String(tag) });
             }
         }
 

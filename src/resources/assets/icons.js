@@ -5,6 +5,6 @@
  * @type {Record<string, string[]>}
  */
 export default {
-    mdi: ["logout", "user", "magnify"],
+    mdi: ["logout", "user", "magnify", "tag-multiple"],
     "mdi-light": ["alert-circle"],
 };

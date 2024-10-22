@@ -1,9 +1,11 @@
 import express from "express";
+import { NamedRouter } from "reversical";
+
+const router = express()
+const namedRouter = new NamedRouter(router)
 
 import articleRoutes from "@routes/article.js";
 
-const router = express.Router();
-
-router.use("/article", articleRoutes);
+namedRouter.use("/article", articleRoutes);
 
 export default router;

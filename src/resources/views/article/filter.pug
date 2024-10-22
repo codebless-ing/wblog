@@ -1,6 +1,6 @@
 form(role='form' method='GET' action='/article')
-  div.searchInput.fluid
+  div.searchInput
     span.icon-magnify
-    input(type="text" placeholder="Title" name="title")
+    input(type="text" placeholder="Title" name="title" value=query.title).fluid
     button(type="submit") Search
   hr

@@ -2,11 +2,14 @@ extends /layout/app.pug
 
 block content
   include filter.pug
-  table
+  div.articleList
     each val in body
-      tr
-        td
-          a(href="article/"+val._id)=val.title
-      tr
-        td#desc=val.body
-        td#desc=val.tags
+      div.articleItem
+        a.title(href="/article/"+val._id)=val.title
+        div.body=val.body
+        if val.tags[0]
+          div.tags
+            i.icon-tag-multiple
+            each tag, i in val.tags
+              - var text = " " + (i == val.tags.length - 1 ? tag : tag + ",")
+              a(href="/article/?tags="+tag)=text

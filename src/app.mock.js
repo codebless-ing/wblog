@@ -1,9 +1,12 @@
 const expressApp = (await import("express")).application;
 
 // Methods not needed for tests
-expressApp.listen = () => {};
+expressApp.listen = async (_, cb) => {
+    cb();
+};
+
 jest.unstable_mockModule("@models/index.js", () => ({
-    connectToDatabase: () => {}
+    connectToDatabase: () => {},
 }));
 
 // Export the modified version of the app

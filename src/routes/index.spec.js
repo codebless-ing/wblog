@@ -6,8 +6,8 @@ import { HttpException } from "@common/exceptions/appExceptions.js";
 
 beforeAll(() => {
     /*
-     * Hacky way of injecting a routes that precede the notFoundHandler middleware. 😢
-     * This is necessary due to the fact the app mock inherants all the setup from the actual app,
+     * Hacky way of injecting routes that precede the notFoundHandler middleware. 😢
+     * This is necessary due to the fact the app mock inherits all the setup from the actual app,
      * including the routes, middlewares and how they are ordered. Any route we add for testing will
      * naturally come after the notFoundHandler middleware in the router stack and thus never be accessible.
      */
@@ -29,7 +29,7 @@ beforeAll(() => {
 });
 
 describe("General HTTP behaviour", () => {
-    describe("when requesting a non existent page", () => {
+    describe("when requesting a non existent route", () => {
         test("should return a page with 404", (done) => {
             const res = request(app).get("/thisroutecantexist").send();
 

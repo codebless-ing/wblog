@@ -10,6 +10,12 @@ class CreateArticleInputDto {
     }).options({ abortEarly: false });
 
     constructor(data) {
+        if (typeof data.tags == "string") {
+            data.tags = data.tags.split(",");
+        } else {
+            data.tags = Array.isArray(data.tags) ? data.tags : [];
+        }
+
         data = Joi.attempt(data, this.constructor.SCHEMA);
 
         this.title = data.title;

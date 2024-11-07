@@ -1,0 +1,7 @@
+if messages
+    if messages.validation && messages.validation.length > 0
+        div#app-messages
+            div#content
+                ul
+                    each data in messages.validation
+                        li= data.message

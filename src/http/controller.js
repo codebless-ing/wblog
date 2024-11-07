@@ -22,7 +22,7 @@ class BaseController {
             throw new HttpException(500, "Request is required for reporting a Validation Error");
         }
 
-        // Copy the validation errors, if any, to the list of one-off messages
+        // Copy the validation errors, if any, to the list of flash messages
         if (Array.isArray(error.details)) {
             const validation = [];
 

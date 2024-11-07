@@ -81,6 +81,10 @@ class ArticleController extends BaseController {
             this.reportBadData(error, req.body);
         }
     };
+
+    new = async (req, res) => {
+        return res.status(200).render("article/new");
+    };
 }
 
 export default ArticleController;

@@ -32,6 +32,18 @@ hr {
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+#app-messages {
+    background-color: $secondary-colour;
+
+    margin: auto;
+
+    width: 75%;
+
+    #content {
+        padding: 0.5em;
+    }
+}
+
 #content-area {
     background-color: $secondary-colour;
 

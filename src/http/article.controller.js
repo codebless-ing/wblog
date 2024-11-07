@@ -7,6 +7,7 @@ import { HttpException } from "@common/exceptions/appExceptions.js";
 
 import BaseController from "@controllers/controller.js";
 import service from "@services/article.js";
+import { routes } from "reversical";
 
 class ArticleController extends BaseController {
     create = async (req, res) => {
@@ -20,7 +21,7 @@ class ArticleController extends BaseController {
 
             return res.status(200).send(`Article [${result._id}] created successfully!`);
         } catch (error) {
-            this.reportBadData(error, req.body);
+            return this.reportBadData(error, req, res).redirect(routes.articleList());
         }
     };
 
@@ -35,7 +36,7 @@ class ArticleController extends BaseController {
 
             return res.status(200).render("article/index", result.data);
         } catch (error) {
-            this.reportBadData(error, req.body);
+            return this.reportBadData(error, req, res);
         }
     };
 
@@ -52,7 +53,7 @@ class ArticleController extends BaseController {
                 .status(200)
                 .render("article/index", { title: result.title, body: result.body, tags: result.tags });
         } catch (error) {
-            this.reportBadData(error, req.body);
+            return this.reportBadData(error, req, res);
         }
     };
 
@@ -67,7 +68,7 @@ class ArticleController extends BaseController {
 
             return res.status(200).render("article/index", { title: result.info });
         } catch (error) {
-            this.reportBadData(error, req.body);
+            return this.reportBadData(error, req, res).redirect(routes.articleList());
         }
     };
 
@@ -78,7 +79,7 @@ class ArticleController extends BaseController {
 
             return res.status(200).render("article/list", { body: result.data, query: req.query });
         } catch (error) {
-            this.reportBadData(error, req.body);
+            return this.reportBadData(error, req, res);
         }
     };
 

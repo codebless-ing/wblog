@@ -1,5 +1,4 @@
 import Joi from "joi";
-import express from "express";
 const ValidationError = Joi.ValidationError;
 
 import { newLogger } from "@common/utils/logger.js";

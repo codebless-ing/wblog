@@ -19,7 +19,7 @@ class ArticleController extends BaseController {
                 throw new HttpException(400, result.info);
             }
 
-            return res.status(200).redirect(routes.articleRead({ id: result.data._id.toString() }));
+            return res.redirect(routes.articleRead({ id: result.data._id.toString() }));
         } catch (error) {
             return this.reportBadData(error, req, res).redirect(routes.articleNew());
         }

@@ -20,7 +20,7 @@ const res = {
     redirect: jest.fn(() => res),
 };
 
-routes.articleRead = jest.fn();
+routes.articleRead = jest.fn((data) => `fictional/path/${data.id}`);
 
 /*
  * SERVICE SPIES
@@ -59,6 +59,9 @@ describe("Article controller", () => {
                         tags: ["asdf", "qwert", "zxcv"],
                     },
                 };
+
+                routes.articleRead.mockClear();
+                res.redirect.mockClear();
             });
 
             test.skip("should return a view", () => {});
@@ -69,8 +72,15 @@ describe("Article controller", () => {
             });
 
             test("should redirect", async () => {
+                // Make sure there are no article saved before the operation
+                expect(ModelMock.collection).toMatchObject({});
+
                 await controller.create(req, res);
-                expect(res.redirect).toHaveBeenCalled();
+                const savedArticle = Object.values(ModelMock.collection)[0];
+
+                // Expect the articleRead path to be generated during the execution
+                expect(routes.articleRead).toBeCalledWith({ id: savedArticle._id.toString() });
+                expect(res.redirect).toBeCalledWith(routes.articleRead({ id: savedArticle._id.toString() }));
             });
 
             // TODO Create more tests when validation, view engine and contracts are implemented

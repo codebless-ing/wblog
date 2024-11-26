@@ -10,10 +10,10 @@ class CreateArticleInputDto {
     }).options({ abortEarly: false });
 
     constructor(data) {
-        if (data.tags == '') {
-            data.tags = [];
+        if (typeof data.tags == "string" && data.tags != '') {
+            data.tags = data.tags.split(',');
         } else {
-            data.tags = data.tags.split(",");
+            data.tags = Array.isArray(data.tags) ? data.tags : [];
         }
 
         data = Joi.attempt(data, this.constructor.SCHEMA);

@@ -86,6 +86,12 @@ class ArticleController extends BaseController {
     new = async (req, res) => {
         return res.status(200).render("article/new");
     };
+
+    tags = async (req, res) => {
+        const result = await service.distinct("tags");
+
+        return res.status(200).render("article/tags", {result});
+    }
 }
 
 export default ArticleController;

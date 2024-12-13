@@ -41,12 +41,7 @@ class BaseController {
             const content = {};
 
             for (const d in req.body) {
-                if (d != "tags") {
-                    content[d] = req.body[d];
-                    continue
-                }
-
-                content[d] = req.body[d].join(",");
+                content[d] = req.body[d];
             }
 
             req.flash('content', content);

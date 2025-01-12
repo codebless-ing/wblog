@@ -1,4 +1,5 @@
 import express from "express";
+import methodOverride from "method-override";
 import "express-async-errors";
 
 import flash from "express-flash";
@@ -10,6 +11,7 @@ import config from "./config.js";
 import { connectToDatabase } from "@models/index.js";
 import { BootException } from "@common/exceptions/coreException.js";
 import { errorHandler, logErrors, notFoundHandler } from "@middlewares/errorHandler.js";
+import { accessLog } from "@middlewares/access.js";
 import { consoleLogger } from "@common/utils/logger.js";
 
 import routes from "@routes/index.js";
@@ -31,6 +33,9 @@ app.locals.routes = registeredRoutes;
 // Serving static files
 app.use(express.static("public"));
 
+// Method override
+app.use(methodOverride('_method'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -39,6 +44,8 @@ if (!config.app.http.session.secret) {
         "Undefined or invalid secret key for HTTP sessions. SESSION_SECRET must be defined in the environment file (.env)."
     );
 }
+
+app.use(accessLog);
 
 /* Session */
 app.use(session(config.app.http.session));

@@ -1,0 +1,20 @@
+extends /layout/app.pug
+
+block content
+  - var actionURL = _id ? routes.articleUpdate({id: _id.toString()}, { _method: "PUT" }) : routes.articleCreate()
+  - var form = { title: title, body: body, tags: tags }
+
+  if messages.content
+    - form.title = messages.content[0].title
+    - form.body = messages.content[0].body
+    - form.tags = messages.content[0].tags
+
+  - form.tags = form.tags && typeof form.tags.join != "undefined" ? form.tags.join(",") : form.tags
+
+  h1(style="text-align:center;") Create your article!
+  form(role='form' method='POST' action=actionURL)
+    div.articleInput
+      input(type="text" placeholder="Title" name="title" value=form.title).fluid
+      textarea(name="body" rows="10" placeholder="Write your message here").fluid= form.body
+      input(type="text" placeholder="Tags; ex: tag1,tag2,tag3" name="tags" value=form.tags).fluid
+      button(type="submit") Create

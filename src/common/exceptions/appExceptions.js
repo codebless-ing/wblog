@@ -13,10 +13,12 @@ class ModelException extends Error {
     layer = "Model";
     isOperational = true;
 
-    constructor(name, message, { isOperational } = {}) {
-        super(name, message);
+    constructor({ isOperational, name, message } = {}) {
+        name = name ?? "Model Exception";
+        message = message ?? "";
+        super(name, {cause: message});
 
-        this.isOperational = isOperational ?? isOperational;
+        this.isOperational = isOperational ?? this.isOperational;
     }
 }
 
@@ -29,7 +31,7 @@ class HttpException extends Error {
     constructor(status, httpMessage, { isOperational, name, message } = {}) {
         name = name ?? "Http Exception";
         message = message ?? "";
-        super(name, message);
+        super(name, {cause: message});
         this.httpMessage = httpMessage ?? this.httpMessage;
         this.isOperational = isOperational ?? this.isOperational;
         this.statusCode = typeof status === "number" && typeof httpReasons[status] == "string" ? status : 500;

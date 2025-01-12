@@ -4,6 +4,7 @@ import { UpdateArticleInputDto } from "@common/dto/article/update.dto.js";
 import { DeleteArticleInputDto } from "@common/dto/article/delete.dto.js";
 import { ListArticleInputDto } from "@common/dto/article/list.dto.js";
 import { HttpException } from "@common/exceptions/appExceptions.js";
+import { routes } from "reversical";
 
 const ModelMock = (await import("@models/model.mock.js")).default;
 const controller = new (await import("@controllers/article.controller.js")).default();
@@ -16,7 +17,10 @@ const res = {
     send: jest.fn(() => res),
     status: jest.fn(() => res),
     render: jest.fn(() => res),
+    redirect: jest.fn(() => res),
 };
+
+routes.articleRead = jest.fn((data) => `fictional/path/${data.id}`);
 
 /*
  * SERVICE SPIES
@@ -32,6 +36,7 @@ const spies = {
 afterEach(() => {
     res.status.mockClear();
     res.render.mockClear();
+    res.redirect.mockClear();
     ModelMock.clearModelObject().clearCollection();
 
     for (const k in spies) {
@@ -55,6 +60,8 @@ describe("Article controller", () => {
                         tags: ["asdf", "qwert", "zxcv"],
                     },
                 };
+
+                routes.articleRead.mockClear();
             });
 
             test.skip("should return a view", () => {});
@@ -64,9 +71,16 @@ describe("Article controller", () => {
                 expect(spies.create).toBeCalledWith(expect.any(CreateArticleInputDto));
             });
 
-            test("should respond with 200", async () => {
+            test("should redirect", async () => {
+                // Make sure there are no article saved before the operation
+                expect(ModelMock.collection).toMatchObject({});
+
                 await controller.create(req, res);
-                expect(res.status).toBeCalledWith(200);
+                const savedArticle = Object.values(ModelMock.collection)[0];
+
+                // Expect the articleRead path to be generated during the execution
+                expect(routes.articleRead).toBeCalledWith({ id: savedArticle._id.toString() });
+                expect(res.redirect).toBeCalledWith(routes.articleRead({ id: savedArticle._id.toString() }));
             });
 
             // TODO Create more tests when validation, view engine and contracts are implemented
@@ -150,10 +164,13 @@ describe("Article controller", () => {
                 expect(spies.update).toBeCalledWith(expect.any(UpdateArticleInputDto));
             });
 
-            test("should respond with 200", async () => {
+            test("should redirect", async () => {
                 await controller.update(req, res);
+                const savedArticle = Object.values(ModelMock.collection)[0];
 
-                expect(res.status).toBeCalledWith(200);
+                // Expect the articleRead path to be generated during the execution
+                expect(routes.articleRead).toBeCalledWith({ id: savedArticle._id.toString() });
+                expect(res.redirect).toBeCalledWith(routes.articleRead({ id: savedArticle._id.toString() }));
             });
         });
 

@@ -43,7 +43,7 @@ export default class BaseModel {
 
             return this;
         })().catch((err) => {
-            logger.error(err);
+            logger.error("%s", err);
             throw new ModelException({ message: err });
         });
     }

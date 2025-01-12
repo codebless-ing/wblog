@@ -1,6 +1,7 @@
 const request = (await import("supertest")).default;
 const ModelMock = (await import("@models/model.mock.js")).default;
-const ArticleRoute = (await import("@routes/article.js")).default;
+
+import { routes } from "reversical";
 
 const app = (await import("../app.mock.js")).default;
 import "express-async-errors";
@@ -82,29 +83,33 @@ describe("Article Controller", () => {
         });
 
         describe("receiving a valid id", () => {
-            test("should return a page with 200", (done) => {
+            test("should redirect to the appropriate read page", (done) => {
                 const res = request(app)
                     .put("/article/601060106010601060106010")
                     .type("form")
                     .send({
                         title: "New title",
                         body: "New body",
-                        tags: ["New tag"],
+                        tags: ["New-tag"],
                     });
 
-                res.expect("content-type", /html/).expect(200, done);
+                res.expect('Location', routes.articleRead({ id: "601060106010601060106010" }))
+                .expect(302, done);
             });
         });
 
         describe("receiving invalid data", () => {
-            test.skip("should return a page with 400", (done) => {
-                // TODO: This one depends on a view being returned with 400
-                const res = request(app).put("/article/6010").type("form").send({
-                    title: "",
-                    tags: 1,
-                });
+            test("should redirect to articleEdit", (done) => {
+                const res = request(app)
+                    .put("/article/601060106010601060106010")
+                    .type("form")
+                    .send({
+                        title: "New title",
+                        tags: 1,
+                    });
 
-                res.expect("Content-Type", /html/).expect(400, done);
+                res.expect('Location', routes.articleEdit({ id: "601060106010601060106010" }))
+                .expect(302, done);
             });
         });
 

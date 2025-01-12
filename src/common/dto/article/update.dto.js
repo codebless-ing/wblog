@@ -6,11 +6,25 @@ class UpdateArticleInputDto {
         id: Joi.string().hex().length(24),
         title: Joi.string().min(3).max(500).required(),
         body: Joi.string().max(500000).required(),
-        tags: Joi.array().items(Joi.string().min(2).max(30).pattern(new RegExp("^[A-z0-9 _-]*$"))),
-        // Regex: alphanum + whitespace + underscore + dash
+        tags: Joi.array().items(
+            Joi.string()
+                .min(2)
+                .max(30)
+                .ruleset.pattern(new RegExp("^[A-z0-9_-]*$"))
+                .message(
+                    "{{#label}} with value {:[.]} must contain only letters, numbers, dashes (-) and underscores (_)"
+                )
+        ),
+        // Regex: alphanum + underscore + dash
     }).options({ abortEarly: false });
 
     constructor(data) {
+        if (typeof data.tags == "string" && data.tags != "") {
+            data.tags = data.tags.split(",");
+        } else {
+            data.tags = Array.isArray(data.tags) ? data.tags : [];
+        }
+
         data = Joi.attempt(data, this.constructor.SCHEMA);
 
         this.id = data.id;

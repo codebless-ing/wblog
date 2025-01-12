@@ -49,11 +49,9 @@ class ArticleController extends BaseController {
                 throw new HttpException(404, result.info);
             }
 
-            return res
-                .status(200)
-                .render("article/index", { title: result.title, body: result.body, tags: result.tags });
+            return res.redirect(routes.articleRead({ id: result.data._id.toString() }));
         } catch (error) {
-            return this.reportBadData(error, req, res);
+            return this.reportBadData(error, req, res).redirect(routes.articleEdit({ id: req.params.id }));
         }
     };
 
@@ -83,15 +81,33 @@ class ArticleController extends BaseController {
         }
     };
 
-    new = async (req, res) => {
-        return res.status(200).render("article/new");
+    write = async (req, res) => {
+        try {
+            const dto = new ReadArticleInputDto({ id: req.params.id });
+
+            if (typeof dto.id != "undefined") {
+                // Update
+                const result = await service.read(dto);
+
+                if (!result.success) {
+                    throw new HttpException(404, result.info);
+                }
+
+                return res.status(200).render("article/write", result.data);
+            } else {
+                // New
+                return res.status(200).render("article/write");
+            }
+        } catch (error) {
+            return this.reportBadData(error, req, res);
+        }
     };
 
     tags = async (req, res) => {
         const result = await service.distinct("tags");
 
-        return res.status(200).render("article/tags", {result});
-    }
+        return res.status(200).render("article/tags", { result });
+    };
 }
 
 export default ArticleController;

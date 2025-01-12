@@ -36,6 +36,7 @@ const spies = {
 afterEach(() => {
     res.status.mockClear();
     res.render.mockClear();
+    res.redirect.mockClear();
     ModelMock.clearModelObject().clearCollection();
 
     for (const k in spies) {
@@ -61,7 +62,6 @@ describe("Article controller", () => {
                 };
 
                 routes.articleRead.mockClear();
-                res.redirect.mockClear();
             });
 
             test.skip("should return a view", () => {});
@@ -164,10 +164,13 @@ describe("Article controller", () => {
                 expect(spies.update).toBeCalledWith(expect.any(UpdateArticleInputDto));
             });
 
-            test("should respond with 200", async () => {
+            test("should redirect", async () => {
                 await controller.update(req, res);
+                const savedArticle = Object.values(ModelMock.collection)[0];
 
-                expect(res.status).toBeCalledWith(200);
+                // Expect the articleRead path to be generated during the execution
+                expect(routes.articleRead).toBeCalledWith({ id: savedArticle._id.toString() });
+                expect(res.redirect).toBeCalledWith(routes.articleRead({ id: savedArticle._id.toString() }));
             });
         });
 

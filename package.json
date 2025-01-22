@@ -39,7 +39,7 @@
     "joi": "^17.13.3",
     "method-override": "^3.0.0",
     "mongodb": "^6.10.0",
-    "mongoose": "^8.8.0",
+    "mongoose": "^8.9.5",
     "pug": "^3.0.3",
     "reversical": "^1.4.2",
     "sass": "^1.80.6",

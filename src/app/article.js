@@ -6,6 +6,9 @@ import { DeleteArticleOutputDto } from "@common/dto/article/delete.dto.js";
 import { ListArticleOutputDto } from "@common/dto/article/list.dto.js";
 import ArticleRepository from "@repositories/article.repository.js";
 
+import { newLogger } from "@common/utils/logger.js";
+const logger = newLogger("Service|Article");
+
 const repository = new ArticleRepository();
 
 export default {
@@ -20,6 +23,8 @@ export default {
         try {
             await article.save();
         } catch (error) {
+            logger.error("%s", error);
+
             //error.errors.properties.message
             return new CreateArticleOutputDto({}, false, JSON.stringify(error.errors));
         }
@@ -51,12 +56,7 @@ export default {
         article.body = body;
         article.tags = tags;
 
-        try {
-            await article.save();
-        } catch (error) {
-            //error.errors.properties.message
-            return new CreateArticleOutputDto({}, false, JSON.stringify(error.errors));
-        }
+        await article.save();
 
         return new UpdateArticleOutputDto(article, true, "Article updated successfully");
     },
@@ -79,7 +79,7 @@ export default {
         return new ListArticleOutputDto(articles, true, "Articles fetched");
     },
 
-    distinct: async(field) => {
+    distinct: async (field) => {
         const result = await new Article();
 
         return result.distinct(field);

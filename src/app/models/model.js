@@ -70,7 +70,7 @@ export default class BaseModel {
         return await this.#model.find(filter);
     }
 
-    // Returns all distinct data in the specified field and returns in an array
+    // Returns, through an array, all distinct data in the specified field
     async distinct(field) {
         return await this.#model.distinct(field);
     }

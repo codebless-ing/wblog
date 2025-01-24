@@ -31,6 +31,7 @@ const spies = {
     update: jest.spyOn(service, "update"),
     delete: jest.spyOn(service, "delete"),
     list: jest.spyOn(service, "list"),
+    distinct: jest.spyOn(service, "distinct"),
 };
 
 afterEach(() => {
@@ -247,4 +248,61 @@ describe("Article controller", () => {
             expect(res.status).toBeCalledWith(200);
         });
     });
+
+    // WRITE
+    describe("when writing articles", () => {
+        let req = {};
+
+        beforeEach(() => {
+            req = {
+                params: {
+                    id: "66a941da61910f79bb7e22c7",
+                },
+            };
+            ModelMock.addDocToCollection(req.params.id, { title: "a", body: "b" });
+        });
+
+        test("should communicate with service layer through the use of dto", async () => {
+            await controller.read(req, res);
+            expect(spies.read).toBeCalledWith(expect.any(ReadArticleInputDto));
+        });
+
+        describe("with existing ID", () => {
+            test("should return the write page filled with the saved article data", async () => {
+                await controller.write(req, res)
+                const savedArticle = Object.values(ModelMock.collection)[0];
+
+                expect(routes.articleRead).toBeCalledWith({ id: req.params.id });
+                expect(res.status).toBeCalledWith(200);
+                expect(res.render).toBeCalledWith("article/write", savedArticle);
+            })
+        })
+
+        describe("with undefined ID", () => {
+            const req = {
+                params: {
+                    id: undefined,
+                },
+            };
+
+            test("should return the write page without data", async () => {
+                await controller.write(req, res)
+
+                expect(res.status).toBeCalledWith(200);
+                expect(res.render).toBeCalledWith("article/write");
+            })
+        })
+
+        describe("with invalid ID", () => {
+            const req = {
+                params: {
+                    id: false,
+                },
+            };
+
+            test("should throw a 404 HTTPException", () => {
+                expect(controller.write(req, res)).rejects.toThrow(HttpException);
+            });
+        })
+    })
 });

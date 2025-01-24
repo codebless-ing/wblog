@@ -305,4 +305,26 @@ describe("Article controller", () => {
             });
         })
     })
+
+    // TAGS
+    describe("when listing tags", () => {
+        let req = {}
+
+        beforeEach(() => {
+            req = {};
+
+            ModelMock.addDocToCollection("66a941da61910f79bb7e22c7", { title: "a", body: "b", tags: ["c", "d"] });
+            ModelMock.addDocToCollection("66a941da61910f79bb7e22c8", { title: "a", body: "b", tags: ["e", "f"] });
+            ModelMock.addDocToCollection("66a941da61910f79bb7e22c9", { title: "a", body: "b", tags: ["c", "g"] });
+        });
+
+        test("should return a page filled with all the unique tags", async () => {
+            const expectedTags = ["c", "d", "e", "f", "g"];
+            await controller.tags(req, res);
+
+            expect(spies.distinct).toBeCalledWith("tags");
+            expect(res.status).toBeCalledWith(200);
+            expect(res.render).toBeCalledWith("article/tags", {"result": expectedTags});
+        })
+    })
 });

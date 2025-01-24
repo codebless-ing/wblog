@@ -68,6 +68,17 @@ ModelMock.clearModelObject = (clearSpies = true) => {
             find: jest.fn(async (query) => {
                 return Object.values(ModelMock.collection);
             }),
+
+            distinct: jest.fn(async (field) => {
+                let result = []
+                for (let i in ModelMock.collection) {
+                    result.push(...ModelMock.collection[i][field]);
+                }
+                // Deletes non-unique data using the Set method
+                result = [...new Set(result)]
+
+                return result;
+            })
         };
     } else {
         ModelMock.object = {

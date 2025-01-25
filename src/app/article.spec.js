@@ -218,4 +218,24 @@ describe("Article Service", () => {
             expect(result).resolves.toBeInstanceOf(BaseOutputDto);
         });
     });
+
+    // DISTINCT
+    describe("when trying to find unique data", () => {
+        test("should return an array containing only unique data", () => {
+            ModelMock.addDocToCollection(124, {
+                title: "vey",
+                body: "fi",
+                tags: ["dum", "uber"],
+            });
+            ModelMock.addDocToCollection(125, {
+                title: "gib",
+                body: "ber",
+                tags: ["vey", "dum", "uber"],
+            });
+
+            const result = ArticleService.distinct("tags");
+
+            expect(result).resolves.toMatchObject(["dum","uber","vey"])
+        })
+    })
 });
